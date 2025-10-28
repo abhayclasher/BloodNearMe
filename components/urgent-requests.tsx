@@ -78,43 +78,8 @@ export default function UrgentRequests() {
   }
 
   return (
-    <div suppressHydrationWarning>
     <section className="py-16 px-4 bg-background">
-      <style>{`
-        @keyframes pulseUrgent {
-          0%, 100% { opacity: 1; }
-          50% { opacity: 0.7; }
-        }
-        @keyframes slideInCard {
-          from {
-            opacity: 0;
-            transform: translateY(20px);
-          }
-          to {
-            opacity: 1;
-            transform: translateY(0);
-          }
-        }
-        @keyframes glowRedBorder {
-          0%, 100% {
-            box-shadow: 0 0 10px rgba(220, 38, 38, 0.3);
-          }
-          50% {
-            box-shadow: 0 0 20px rgba(220, 38, 38, 0.6);
-          }
-        }
-        .pulse-badge {
-          animation: pulseUrgent 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
-        }
-        .slide-card {
-          animation: slideInCard 0.5s ease-out forwards;
-        }
-        .glow-card {
-          animation: glowRedBorder 2s ease-in-out infinite;
-        }
-      `}</style>
-
-      <div className="max-w-6xl mx-auto" suppressHydrationWarning>
+      <div className="max-w-6xl mx-auto">
         <div className="mb-12">
           <div className="flex items-center gap-3 mb-4">
             <div className="w-10 h-10 bg-red-600 rounded-full flex items-center justify-center text-white pulse-badge text-lg">
@@ -201,6 +166,5 @@ export default function UrgentRequests() {
         )}
       </div>
     </section>
-    </div>
   )
 }
