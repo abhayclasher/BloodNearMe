@@ -4,7 +4,6 @@ import Link from "next/link"
 import { useState } from "react"
 import UrgentRequests from "@/components/urgent-requests"
 import AboutSection from "@/components/about-section"
-import DonorReceiverForms from "@/components/donor-receiver-forms"
 
 function JoinNetworkSection() {
   const [activeTab, setActiveTab] = useState<"donor" | "receiver">("donor");
@@ -351,8 +350,6 @@ export default function Home() {
           </div>
         </div>
       </section>
-
-      <DonorReceiverForms />
 
       <AboutSection />
 
