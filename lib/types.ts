@@ -27,6 +27,8 @@ export interface BloodRequest {
 }
 
 export interface DonorProfile {
+  phoneNumber: string
+  fullName: string
   id: string
   name: string
   phone: string

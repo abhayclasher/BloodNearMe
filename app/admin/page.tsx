@@ -71,7 +71,7 @@ export default function AdminPage() {
       // Calculate stats
       const openRequests = requestsList.filter(r => r.status === 'open').length
       const availableDonors = donorsList.filter(d => d.available).length
-      const criticalRequests = requestsList.filter(r => r.urgency === 'critical' || r.urgency === 'urgent').length
+      const criticalRequests = requestsList.filter(r => r.urgency === 'high').length
       const dayAgo = new Date()
       dayAgo.setDate(dayAgo.getDate() - 1)
       const recentRequests = requestsList.filter(r => r.createdAt > dayAgo).length
@@ -121,7 +121,7 @@ export default function AdminPage() {
       
       // Recalculate stats
       const openRequests = updatedRequests.filter(r => r.status === 'open').length
-      const criticalRequests = updatedRequests.filter(r => r.urgency === 'critical' || r.urgency === 'urgent').length
+      const criticalRequests = updatedRequests.filter(r => r.urgency === 'high').length
       const dayAgo = new Date()
       dayAgo.setDate(dayAgo.getDate() - 1)
       const recentRequests = updatedRequests.filter(r => r.createdAt > dayAgo).length
@@ -331,8 +331,8 @@ export default function AdminPage() {
                   </div>
                   <div className="text-right">
                     <p className={`text-sm font-semibold ${
-                      request.urgency === 'critical' || request.urgency === 'urgent' ? 'text-red-600' : 
-                      request.urgency === 'high' ? 'text-orange-600' : 'text-green-600'
+                      request.urgency === 'high' ? 'text-red-600' : 
+                      request.urgency === 'medium' ? 'text-orange-600' : 'text-green-600'
                     }`}>
                       {request.urgency.toUpperCase()}
                     </p>

@@ -1,0 +1,9 @@
+[build]
+  command = "pnpm -w build"
+  publish = "."
+
+[context.production.environment]
+  NODE_VERSION = "18"
+
+[[plugins]]
+  package = "@netlify/plugin-nextjs"
