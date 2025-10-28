@@ -15,6 +15,9 @@ import { toast } from "sonner";
 import { BLOOD_GROUPS, INDIAN_STATES } from "@/lib/types";
 
 export default function AdminDashboardPage() {
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [password, setPassword] = useState("");
+  const [passwordError, setPasswordError] = useState("");
   const [stats, setStats] = useState({
     totalDonors: 0,
     totalReceivers: 0,
@@ -135,8 +138,18 @@ export default function AdminDashboardPage() {
   };
 
   useEffect(() => {
-    fetchStats();
+    // Check if already authenticated in session
+    const auth = sessionStorage.getItem('adminAuth');
+    if (auth === 'cla3her') {
+      setIsAuthenticated(true);
+    }
   }, []);
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      fetchStats();
+    }
+  }, [isAuthenticated]);
 
   const handleUpdateDonor = async () => {
     if (!editingDonor) return;
@@ -272,14 +285,90 @@ export default function AdminDashboardPage() {
     }
   };
 
+  const handleLogin = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (password === "cla3her") {
+      setIsAuthenticated(true);
+      sessionStorage.setItem('adminAuth', 'cla3her');
+      setPasswordError("");
+      toast.success("Welcome to Admin Dashboard!");
+    } else {
+      setPasswordError("Incorrect password. Please try again.");
+      toast.error("Incorrect password");
+    }
+  };
+
+  const handleLogout = () => {
+    sessionStorage.removeItem('adminAuth');
+    setIsAuthenticated(false);
+    setPassword("");
+    toast.success("Logged out successfully");
+  };
+
+  // Show login screen if not authenticated
+  if (!isAuthenticated) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-background via-card/20 to-background flex items-center justify-center p-4">
+        <div className="max-w-md w-full">
+          <div className="bg-card border-2 border-red-600/30 rounded-2xl p-8 shadow-2xl">
+            <div className="text-center mb-8">
+              <div className="w-20 h-20 bg-red-600 rounded-full flex items-center justify-center text-4xl mx-auto mb-4">
+                🔒
+              </div>
+              <h1 className="text-3xl font-bold mb-2 bg-gradient-to-r from-red-500 to-red-700 bg-clip-text text-transparent">
+                Admin Access
+              </h1>
+              <p className="text-gray-400">Enter password to continue</p>
+            </div>
+            <form onSubmit={handleLogin} className="space-y-6">
+              <div>
+                <Label htmlFor="password" className="text-white mb-2 block">
+                  Password
+                </Label>
+                <Input
+                  id="password"
+                  type="password"
+                  placeholder="Enter admin password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  className={`bg-gray-900 border-gray-700 text-white placeholder:text-gray-500 ${
+                    passwordError ? "border-red-500" : ""
+                  }`}
+                  autoFocus
+                />
+                {passwordError && (
+                  <p className="text-red-500 text-sm mt-2">{passwordError}</p>
+                )}
+              </div>
+              <Button
+                type="submit"
+                className="w-full bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 text-white font-semibold py-3"
+              >
+                🔓 Access Dashboard
+              </Button>
+            </form>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-background via-card/20 to-background p-4 md:p-8">
       {/* Header */}
-      <div className="mb-8">
-        <h1 className="text-4xl md:text-5xl font-bold mb-2 bg-gradient-to-r from-red-500 to-red-700 bg-clip-text text-transparent">
-          Admin Dashboard
-        </h1>
-        <p className="text-gray-400">Manage donors, requests, and monitor platform stats</p>
+      <div className="mb-8 flex justify-between items-center">
+        <div>
+          <h1 className="text-4xl md:text-5xl font-bold mb-2 bg-gradient-to-r from-red-500 to-red-700 bg-clip-text text-transparent">
+            Admin Dashboard
+          </h1>
+          <p className="text-gray-400">Manage donors, requests, and monitor platform stats</p>
+        </div>
+        <Button
+          onClick={handleLogout}
+          className="bg-red-600 hover:bg-red-700 text-white"
+        >
+          🚪 Logout
+        </Button>
       </div>
 
       {/* Tab Navigation */}
