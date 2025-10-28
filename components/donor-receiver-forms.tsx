@@ -203,10 +203,10 @@ export default function DonorReceiverForms() {
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
           {/* Donor Form */}
-          <div className="bg-card border-2 border-red-600/30 rounded-xl p-8 form-slide form-glow-red hover:border-red-600 transition-all duration-300">
+          <div className="bg-card border-2 border-blue-600/30 rounded-xl p-8 form-slide form-glow-blue hover:border-blue-600 transition-all duration-300">
             <div className="flex items-center gap-3 mb-8">
-              <div className="w-12 h-12 bg-red-600 rounded-full flex items-center justify-center text-white text-xl">
-                ❤️
+              <div className="w-12 h-12 bg-blue-600 rounded-full flex items-center justify-center text-white text-xl">
+                🩸
               </div>
               <h3 className="text-3xl font-bold text-white">Become a Donor</h3>
             </div>
@@ -224,7 +224,7 @@ export default function DonorReceiverForms() {
                 placeholder="Full Name"
                 value={donorForm.fullName}
                 onChange={handleDonorChange}
-                className="w-full bg-gray-900 border border-gray-700 rounded-lg px-4 py-3 text-white placeholder-gray-500 focus:border-red-600 focus:outline-none transition-colors"
+                className="w-full bg-gray-900 border border-gray-700 rounded-lg px-4 py-3 text-white placeholder-gray-500 focus:border-blue-600 focus:outline-none transition-colors"
                 required
               />
 
@@ -235,14 +235,14 @@ export default function DonorReceiverForms() {
                   placeholder="Age"
                   value={donorForm.age}
                   onChange={handleDonorChange}
-                  className="bg-gray-900 border border-gray-700 rounded-lg px-4 py-3 text-white placeholder-gray-500 focus:border-red-600 focus:outline-none transition-colors"
+                  className="bg-gray-900 border border-gray-700 rounded-lg px-4 py-3 text-white placeholder-gray-500 focus:border-blue-600 focus:outline-none transition-colors"
                   required
                 />
                 <select
                   name="bloodGroup"
                   value={donorForm.bloodGroup}
                   onChange={handleDonorChange}
-                  className="bg-gray-900 border border-gray-700 rounded-lg px-4 py-3 text-white focus:border-red-600 focus:outline-none transition-colors"
+                  className="bg-gray-900 border border-gray-700 rounded-lg px-4 py-3 text-white focus:border-blue-600 focus:outline-none transition-colors"
                   required
                 >
                   <option value="">Blood Group</option>
@@ -258,7 +258,7 @@ export default function DonorReceiverForms() {
                 name="gender"
                 value={donorForm.gender}
                 onChange={handleDonorChange}
-                className="w-full bg-gray-900 border border-gray-700 rounded-lg px-4 py-3 text-white focus:border-red-600 focus:outline-none transition-colors"
+                className="w-full bg-gray-900 border border-gray-700 rounded-lg px-4 py-3 text-white focus:border-blue-600 focus:outline-none transition-colors"
                 required
               >
                 <option value="">Gender</option>
@@ -271,7 +271,7 @@ export default function DonorReceiverForms() {
                 name="state"
                 value={donorForm.state}
                 onChange={handleDonorChange}
-                className="w-full bg-gray-900 border border-gray-700 rounded-lg px-4 py-3 text-white focus:border-red-600 focus:outline-none transition-colors"
+                className="w-full bg-gray-900 border border-gray-700 rounded-lg px-4 py-3 text-white focus:border-blue-600 focus:outline-none transition-colors"
                 required
               >
                 <option value="">Select State</option>
@@ -286,7 +286,7 @@ export default function DonorReceiverForms() {
                 name="city"
                 value={donorForm.city}
                 onChange={handleDonorChange}
-                className="w-full bg-gray-900 border border-gray-700 rounded-lg px-4 py-3 text-white focus:border-red-600 focus:outline-none transition-colors"
+                className="w-full bg-gray-900 border border-gray-700 rounded-lg px-4 py-3 text-white focus:border-blue-600 focus:outline-none transition-colors"
                 required
               >
                 <option value="">Select City</option>
@@ -304,7 +304,7 @@ export default function DonorReceiverForms() {
                   placeholder="Pin Code"
                   value={donorForm.pinCode}
                   onChange={handleDonorChange}
-                  className="bg-gray-900 border border-gray-700 rounded-lg px-4 py-3 text-white placeholder-gray-500 focus:border-red-600 focus:outline-none transition-colors"
+                  className="bg-gray-900 border border-gray-700 rounded-lg px-4 py-3 text-white placeholder-gray-500 focus:border-blue-600 focus:outline-none transition-colors"
                   required
                 />
                 <input
@@ -313,7 +313,7 @@ export default function DonorReceiverForms() {
                   placeholder="Phone Number"
                   value={donorForm.phoneNumber}
                   onChange={handleDonorChange}
-                  className="bg-gray-900 border border-gray-700 rounded-lg px-4 py-3 text-white placeholder-gray-500 focus:border-red-600 focus:outline-none transition-colors"
+                  className="bg-gray-900 border border-gray-700 rounded-lg px-4 py-3 text-white placeholder-gray-500 focus:border-blue-600 focus:outline-none transition-colors"
                   required
                 />
               </div>
@@ -323,7 +323,7 @@ export default function DonorReceiverForms() {
                   name="dobDay"
                   value={donorForm.dobDay}
                   onChange={handleDonorChange}
-                  className="bg-gray-900 border border-gray-700 rounded-lg px-4 py-3 text-white focus:border-red-600 focus:outline-none transition-colors"
+                  className="bg-gray-900 border border-gray-700 rounded-lg px-4 py-3 text-white focus:border-blue-600 focus:outline-none transition-colors"
                   required
                 >
                   <option value="">Day</option>
@@ -335,7 +335,7 @@ export default function DonorReceiverForms() {
                   name="dobMonth"
                   value={donorForm.dobMonth}
                   onChange={handleDonorChange}
-                  className="bg-gray-900 border border-gray-700 rounded-lg px-4 py-3 text-white focus:border-red-600 focus:outline-none transition-colors"
+                  className="bg-gray-900 border border-gray-700 rounded-lg px-4 py-3 text-white focus:border-blue-600 focus:outline-none transition-colors"
                   required
                 >
                   <option value="">Month</option>
@@ -350,7 +350,7 @@ export default function DonorReceiverForms() {
                   name="dobYear"
                   value={donorForm.dobYear}
                   onChange={handleDonorChange}
-                  className="bg-gray-900 border border-gray-700 rounded-lg px-4 py-3 text-white focus:border-red-600 focus:outline-none transition-colors"
+                  className="bg-gray-900 border border-gray-700 rounded-lg px-4 py-3 text-white focus:border-blue-600 focus:outline-none transition-colors"
                   required
                 >
                   <option value="">Year</option>
@@ -363,7 +363,7 @@ export default function DonorReceiverForms() {
               <button
                 type="submit"
                 disabled={donorLoading}
-                className="w-full bg-red-600 hover:bg-red-700 text-white font-bold py-3 rounded-lg transition-all duration-200 transform hover:scale-105 disabled:opacity-50"
+                className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 rounded-lg transition-all duration-200 transform hover:scale-105 disabled:opacity-50"
               >
                 {donorLoading ? "Registering..." : "Register as Donor"}
               </button>
@@ -372,12 +372,12 @@ export default function DonorReceiverForms() {
 
           {/* Receiver Form */}
           <div
-            className="bg-card border-2 border-blue-600/30 rounded-xl p-8 form-slide form-glow-blue hover:border-blue-600 transition-all duration-300"
+            className="bg-card border-2 border-red-600/30 rounded-xl p-8 form-slide form-glow-red hover:border-red-600 transition-all duration-300"
             style={{ animationDelay: "100ms" }}
           >
             <div className="flex items-center gap-3 mb-8">
-              <div className="w-12 h-12 bg-blue-600 rounded-full flex items-center justify-center text-white text-xl">
-                💧
+              <div className="w-12 h-12 bg-red-600 rounded-full flex items-center justify-center text-white text-xl">
+                🆘
               </div>
               <h3 className="text-3xl font-bold text-white">Need Blood</h3>
             </div>
@@ -395,7 +395,7 @@ export default function DonorReceiverForms() {
                 placeholder="Patient Name"
                 value={receiverForm.patientName}
                 onChange={handleReceiverChange}
-                className="w-full bg-gray-900 border border-gray-700 rounded-lg px-4 py-3 text-white placeholder-gray-500 focus:border-blue-600 focus:outline-none transition-colors"
+                className="w-full bg-gray-900 border border-gray-700 rounded-lg px-4 py-3 text-white placeholder-gray-500 focus:border-red-600 focus:outline-none transition-colors"
                 required
               />
 
@@ -403,7 +403,7 @@ export default function DonorReceiverForms() {
                 name="bloodGroupNeeded"
                 value={receiverForm.bloodGroupNeeded}
                 onChange={handleReceiverChange}
-                className="w-full bg-gray-900 border border-gray-700 rounded-lg px-4 py-3 text-white focus:border-blue-600 focus:outline-none transition-colors"
+                className="w-full bg-gray-900 border border-gray-700 rounded-lg px-4 py-3 text-white focus:border-red-600 focus:outline-none transition-colors"
                 required
               >
                 <option value="">Blood Group Needed</option>
@@ -418,7 +418,7 @@ export default function DonorReceiverForms() {
                 name="state"
                 value={receiverForm.state}
                 onChange={handleReceiverChange}
-                className="w-full bg-gray-900 border border-gray-700 rounded-lg px-4 py-3 text-white focus:border-blue-600 focus:outline-none transition-colors"
+                className="w-full bg-gray-900 border border-gray-700 rounded-lg px-4 py-3 text-white focus:border-red-600 focus:outline-none transition-colors"
                 required
               >
                 <option value="">Select State</option>
@@ -433,7 +433,7 @@ export default function DonorReceiverForms() {
                 name="city"
                 value={receiverForm.city}
                 onChange={handleReceiverChange}
-                className="w-full bg-gray-900 border border-gray-700 rounded-lg px-4 py-3 text-white focus:border-blue-600 focus:outline-none transition-colors"
+                className="w-full bg-gray-900 border border-gray-700 rounded-lg px-4 py-3 text-white focus:border-red-600 focus:outline-none transition-colors"
                 required
               >
                 <option value="">Select City</option>
@@ -458,7 +458,7 @@ export default function DonorReceiverForms() {
                 name="urgencyLevel"
                 value={receiverForm.urgencyLevel}
                 onChange={handleReceiverChange}
-                className="w-full bg-gray-900 border border-gray-700 rounded-lg px-4 py-3 text-white focus:border-blue-600 focus:outline-none transition-colors"
+                className="w-full bg-gray-900 border border-gray-700 rounded-lg px-4 py-3 text-white focus:border-red-600 focus:outline-none transition-colors"
                 required
               >
                 <option value="normal">✓ Normal</option>
@@ -479,7 +479,7 @@ export default function DonorReceiverForms() {
               <button
                 type="submit"
                 disabled={receiverLoading}
-                className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 rounded-lg transition-all duration-200 transform hover:scale-105 disabled:opacity-50"
+                className="w-full bg-red-600 hover:bg-red-700 text-white font-bold py-3 rounded-lg transition-all duration-200 transform hover:scale-105 disabled:opacity-50"
               >
                 {receiverLoading ? "Posting..." : "Submit Request"}
               </button>

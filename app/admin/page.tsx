@@ -1,122 +1,121 @@
 "use client";
+
 import { useEffect, useState } from "react";
-import {
-  collection,
-  getDocs,
-  query,
-  where,
-  orderBy,
-  limit,
-  doc,
-  updateDoc,
-  deleteDoc,
-} from "firebase/firestore";
+import { collection, getDocs, query, where, orderBy, limit, doc, updateDoc, deleteDoc } from "firebase/firestore";
 import { getDbClient } from "@/lib/firebase";
+import type { BloodRequest, DonorProfile, User } from "@/lib/types";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Table, TableHeader, TableRow, TableHead, TableBody, TableCell } from "@/components/ui/table";
+import { Button } from "@/components/ui/button";
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { toast } from "sonner";
+import { BLOOD_GROUPS, INDIAN_STATES } from "@/lib/types";
 
-// --- HeroHeader Component ---
-function HeroHeader() {
-  return (
-    <div className="bg-gradient-to-r from-red-500 to-pink-500 text-white py-8 px-6 rounded-lg mb-8 shadow">
-      <h1 className="text-4xl font-bold mb-2">Admin Dashboard</h1>
-      <p className="text-lg">Manage users, requests, and platform statistics.</p>
-    </div>
-  );
-}
-
-export default function AdminClient() {
-  // --- Admin login state ---
-  const [adminPassword, setAdminPassword] = useState("");
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [loginError, setLoginError] = useState("");
-
-  // --- Stats and data ---
+export default function AdminDashboardPage() {
   const [stats, setStats] = useState({
     totalDonors: 0,
     totalReceivers: 0,
+    totalUsers: 0,
     openRequests: 0,
     fulfilledRequests: 0,
+    totalRequests: 0,
     donorsByBloodGroup: {} as Record<string, number>,
     requestsByBloodGroup: {} as Record<string, number>,
     requestsByUrgency: {} as Record<string, number>,
   });
-  const [recentRequests, setRecentRequests] = useState<any[]>([]);
-  const [users, setUsers] = useState<any[]>([]);
-  const [requests, setRequests] = useState<any[]>([]);
-  const [loading, setLoading] = useState(false);
+  const [recentRequests, setRecentRequests] = useState<BloodRequest[]>([]);
+  const [allDonors, setAllDonors] = useState<DonorProfile[]>([]);
+  const [allRequests, setAllRequests] = useState<BloodRequest[]>([]);
+  const [allUsers, setAllUsers] = useState<User[]>([]);
+  const [editingDonor, setEditingDonor] = useState<DonorProfile | null>(null);
+  const [editingRequest, setEditingRequest] = useState<BloodRequest | null>(null);
+  const [editingUser, setEditingUser] = useState<User | null>(null);
+  const [isEditDonorOpen, setIsEditDonorOpen] = useState(false);
+  const [isEditRequestOpen, setIsEditRequestOpen] = useState(false);
+  const [isEditUserOpen, setIsEditUserOpen] = useState(false);
+  const [activeTab, setActiveTab] = useState<"overview" | "donors" | "requests" | "users">("overview");
 
-  // --- User edit state ---
-  const [editUserId, setEditUserId] = useState<string | null>(null);
-  const [editUserData, setEditUserData] = useState<Partial<any>>({});
+  const fetchStats = async () => {
+    const db = getDbClient();
+    if (!db) return;
 
-  // --- Request edit state ---
-  const [editRequestId, setEditRequestId] = useState<string | null>(null);
-  const [editRequestData, setEditRequestData] = useState<Partial<any>>({});
-
-  // --- Admin login handler ---
-  const handleLogin = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (adminPassword === "admin123") {
-      setIsAuthenticated(true);
-      setLoginError("");
-    } else {
-      setLoginError("Incorrect password.");
-    }
-  };
-
-  // --- Fetch stats, users, requests ---
-  useEffect(() => {
-    if (!isAuthenticated) return;
-    const fetchStats = async () => {
-      const db = getDbClient();
-      if (!db) return;
-
-      // Donors
+    try {
+      // Fetch total donors
       const donorsSnapshot = await getDocs(collection(db, "donors"));
       const totalDonors = donorsSnapshot.size;
-      const donorsData = donorsSnapshot.docs.map((doc) => doc.data());
+      const donorsData = donorsSnapshot.docs.map((doc) => ({
+        id: doc.id,
+        ...doc.data(),
+        createdAt: doc.data().createdAt?.toDate?.() || new Date(),
+        lastDonationDate: doc.data().lastDonationDate?.toDate?.() || undefined,
+      })) as DonorProfile[];
+      setAllDonors(donorsData);
+      console.log("Loaded donors:", donorsData.length);
 
-      // Receivers
+      // Fetch total receivers
       const receiversQuery = query(collection(db, "users"), where("role", "==", "receiver"));
       const receiversSnapshot = await getDocs(receiversQuery);
       const totalReceivers = receiversSnapshot.size;
 
-      // Requests
-      const requestsSnapshot = await getDocs(collection(db, "bloodRequests"));
-      const allRequests = requestsSnapshot.docs.map((doc) => ({
+      // Fetch all users
+      const usersSnapshot = await getDocs(collection(db, "users"));
+      const totalUsers = usersSnapshot.size;
+      const usersData = usersSnapshot.docs.map((doc) => ({
         id: doc.id,
         ...doc.data(),
-        createdAt: doc.data().createdAt?.toDate?.() ?? null,
-      }));
-      const openRequests = allRequests.filter((req) => req.status === "open").length;
-      const fulfilledRequests = allRequests.filter((req) => req.status === "fulfilled").length;
+      })) as User[];
+      setAllUsers(usersData);
+      console.log("Loaded users:", usersData.length);
 
-      // Group stats
-      const donorsByBloodGroup = donorsData.reduce((acc: any, donor: any) => {
-        if (donor.bloodGroup) acc[donor.bloodGroup] = (acc[donor.bloodGroup] || 0) + 1;
+      // Fetch blood requests
+      const requestsSnapshot = await getDocs(collection(db, "bloodRequests"));
+      const allRequestsData = requestsSnapshot.docs.map((doc) => ({
+        id: doc.id,
+        ...doc.data(),
+        createdAt: doc.data().createdAt?.toDate?.() || new Date(),
+      })) as BloodRequest[];
+      setAllRequests(allRequestsData);
+      console.log("Loaded requests:", allRequestsData.length);
+      console.log("Sample request:", allRequestsData[0]);
+      
+      const openRequests = allRequestsData.filter((req) => req.status === "open").length;
+      const fulfilledRequests = allRequestsData.filter((req) => req.status === "fulfilled").length;
+
+      // Calculate donors by blood group
+      const donorsByBloodGroup = donorsData.reduce((acc, donor) => {
+        if (donor.bloodGroup) {
+          acc[donor.bloodGroup] = (acc[donor.bloodGroup] || 0) + 1;
+        }
         return acc;
-      }, {});
-      const requestsByBloodGroup = allRequests.reduce((acc: any, req: any) => {
+      }, {} as Record<string, number>);
+
+      // Calculate requests by blood group and urgency
+      const requestsByBloodGroup = allRequestsData.reduce((acc, req) => {
         acc[req.bloodGroup] = (acc[req.bloodGroup] || 0) + 1;
         return acc;
-      }, {});
-      const requestsByUrgency = allRequests.reduce((acc: any, req: any) => {
+      }, {} as Record<string, number>);
+
+      const requestsByUrgency = allRequestsData.reduce((acc, req) => {
         acc[req.urgency] = (acc[req.urgency] || 0) + 1;
         return acc;
-      }, {});
+      }, {} as Record<string, number>);
 
       setStats({
         totalDonors,
         totalReceivers,
+        totalUsers,
         openRequests,
         fulfilledRequests,
+        totalRequests: allRequestsData.length,
         donorsByBloodGroup,
         requestsByBloodGroup,
         requestsByUrgency,
       });
 
-      // Recent requests
+      // Fetch recent requests
       const recentRequestsQuery = query(
         collection(db, "bloodRequests"),
         orderBy("createdAt", "desc"),
@@ -126,556 +125,1141 @@ export default function AdminClient() {
       const recentRequestsData = recentRequestsSnapshot.docs.map((doc) => ({
         id: doc.id,
         ...doc.data(),
-        createdAt: doc.data().createdAt?.toDate?.() ?? null,
-      }));
+        createdAt: doc.data().createdAt?.toDate?.() || new Date(),
+      })) as BloodRequest[];
       setRecentRequests(recentRequestsData);
-    };
+    } catch (error) {
+      console.error("Error fetching stats:", error);
+      toast.error("Failed to fetch dashboard data");
+    }
+  };
 
-    const fetchUsers = async () => {
-      const db = getDbClient();
-      if (!db) return;
-      const usersSnapshot = await getDocs(collection(db, "users"));
-      const usersData = usersSnapshot.docs.map((doc) => ({
-        id: doc.id,
-        ...doc.data(),
-      }));
-      setUsers(usersData);
-    };
-
-    const fetchRequests = async () => {
-      const db = getDbClient();
-      if (!db) return;
-      const requestsSnapshot = await getDocs(collection(db, "bloodRequests"));
-      const requestsData = requestsSnapshot.docs.map((doc) => ({
-        id: doc.id,
-        ...doc.data(),
-        createdAt: doc.data().createdAt?.toDate?.() ?? null,
-      }));
-      setRequests(requestsData);
-    };
-
+  useEffect(() => {
     fetchStats();
-    fetchUsers();
-    fetchRequests();
-  }, [isAuthenticated]);
+  }, []);
 
-  // --- User Management Handlers ---
-  const handleEditUser = (user: any) => {
-    setEditUserId(user.id);
-    setEditUserData(user);
-  };
+  const handleUpdateDonor = async () => {
+    if (!editingDonor) return;
+    const db = getDbClient();
+    if (!db) return;
 
-  const handleEditUserChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
-    const { name, value } = e.target;
-    setEditUserData((prev) => ({ ...prev, [name]: value }));
-  };
-
-  const handleSaveUser = async () => {
-    if (!editUserId) return;
-    setLoading(true);
     try {
-      const db = getDbClient();
-      if (!db) return;
-      const userRef = doc(db, "users", editUserId);
-      await updateDoc(userRef, editUserData);
-      setUsers((prev) =>
-        prev.map((u) => (u.id === editUserId ? { ...u, ...editUserData } : u))
-      );
-      setEditUserId(null);
-      setEditUserData({});
-    } catch (err) {
-      alert("Failed to update user.");
-    } finally {
-      setLoading(false);
+      // Filter out undefined values
+      const updateData: any = {};
+      if (editingDonor.fullName !== undefined) updateData.fullName = editingDonor.fullName;
+      if (editingDonor.name !== undefined) updateData.name = editingDonor.name;
+      if (editingDonor.phone !== undefined) updateData.phone = editingDonor.phone;
+      if (editingDonor.phoneNumber !== undefined) updateData.phoneNumber = editingDonor.phoneNumber;
+      if (editingDonor.bloodGroup !== undefined) updateData.bloodGroup = editingDonor.bloodGroup;
+      if (editingDonor.city !== undefined) updateData.city = editingDonor.city;
+      if (editingDonor.state !== undefined) updateData.state = editingDonor.state;
+      if (editingDonor.age !== undefined) updateData.age = editingDonor.age;
+      if (editingDonor.gender !== undefined) updateData.gender = editingDonor.gender;
+      if (editingDonor.available !== undefined) updateData.available = editingDonor.available;
+
+      await updateDoc(doc(db, "donors", editingDonor.id), updateData);
+      toast.success("Donor updated successfully");
+      setIsEditDonorOpen(false);
+      setEditingDonor(null);
+      fetchStats();
+    } catch (error) {
+      console.error("Error updating donor:", error);
+      toast.error("Failed to update donor");
     }
   };
 
-  const handleDeleteUser = async (userId: string) => {
-    if (!window.confirm("Are you sure you want to delete this user?")) return;
-    setLoading(true);
+  const handleDeleteDonor = async (id: string) => {
+    if (!confirm("Are you sure you want to delete this donor?")) return;
+    const db = getDbClient();
+    if (!db) return;
+
     try {
-      const db = getDbClient();
-      if (!db) return;
-      await deleteDoc(doc(db, "users", userId));
-      setUsers((prev) => prev.filter((u) => u.id !== userId));
-    } catch (err) {
-      alert("Failed to delete user.");
-    } finally {
-      setLoading(false);
+      await deleteDoc(doc(db, "donors", id));
+      toast.success("Donor deleted successfully");
+      fetchStats();
+    } catch (error) {
+      console.error("Error deleting donor:", error);
+      toast.error("Failed to delete donor");
     }
   };
 
-  // --- Request Management Handlers ---
-  const handleEditRequest = (req: any) => {
-    setEditRequestId(req.id);
-    setEditRequestData(req);
-  };
+  const handleUpdateRequest = async () => {
+    if (!editingRequest) return;
+    const db = getDbClient();
+    if (!db) return;
 
-  const handleEditRequestChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
-    const { name, value } = e.target;
-    setEditRequestData((prev) => ({ ...prev, [name]: value }));
-  };
-
-  const handleSaveRequest = async () => {
-    if (!editRequestId) return;
-    setLoading(true);
     try {
-      const db = getDbClient();
-      if (!db) return;
-      const reqRef = doc(db, "bloodRequests", editRequestId);
-      await updateDoc(reqRef, editRequestData);
-      setRequests((prev) =>
-        prev.map((r) => (r.id === editRequestId ? { ...r, ...editRequestData } : r))
-      );
-      setEditRequestId(null);
-      setEditRequestData({});
-    } catch (err) {
-      alert("Failed to update request.");
-    } finally {
-      setLoading(false);
+      // Filter out undefined values
+      const updateData: any = {};
+      if (editingRequest.name !== undefined) updateData.name = editingRequest.name;
+      if (editingRequest.phone !== undefined) updateData.phone = editingRequest.phone;
+      if (editingRequest.bloodGroup !== undefined) updateData.bloodGroup = editingRequest.bloodGroup;
+      if (editingRequest.city !== undefined) updateData.city = editingRequest.city;
+      if (editingRequest.state !== undefined) updateData.state = editingRequest.state;
+      if (editingRequest.hospital !== undefined) updateData.hospital = editingRequest.hospital;
+      if (editingRequest.urgency !== undefined) updateData.urgency = editingRequest.urgency;
+      if (editingRequest.unitsNeeded !== undefined) updateData.unitsNeeded = editingRequest.unitsNeeded;
+      if (editingRequest.description !== undefined) updateData.description = editingRequest.description;
+      if (editingRequest.status !== undefined) updateData.status = editingRequest.status;
+
+      await updateDoc(doc(db, "bloodRequests", editingRequest.id), updateData);
+      toast.success("Request updated successfully");
+      setIsEditRequestOpen(false);
+      setEditingRequest(null);
+      fetchStats();
+    } catch (error) {
+      console.error("Error updating request:", error);
+      toast.error("Failed to update request");
     }
   };
 
-  const handleDeleteRequest = async (reqId: string) => {
-    if (!window.confirm("Are you sure you want to delete this request?")) return;
-    setLoading(true);
+  const handleDeleteRequest = async (id: string) => {
+    if (!confirm("Are you sure you want to delete this request?")) return;
+    const db = getDbClient();
+    if (!db) return;
+
     try {
-      const db = getDbClient();
-      if (!db) return;
-      await deleteDoc(doc(db, "bloodRequests", reqId));
-      setRequests((prev) => prev.filter((r) => r.id !== reqId));
-    } catch (err) {
-      alert("Failed to delete request.");
-    } finally {
-      setLoading(false);
+      await deleteDoc(doc(db, "bloodRequests", id));
+      toast.success("Request deleted successfully");
+      fetchStats();
+    } catch (error) {
+      console.error("Error deleting request:", error);
+      toast.error("Failed to delete request");
     }
   };
 
-  // --- CSV Export ---
-  const exportCSV = (data: any[], filename: string, headers: string[]) => {
-    if (!data || data.length === 0) return;
-    const csv = [
-      headers.join(","),
-      ...data.map((item) =>
-        headers
-          .map((h) => {
-            let value = item[h] === undefined || item[h] === null ? "" : String(item[h]);
-            if (value.includes(",") || value.includes('"') || value.includes("\n")) {
-              value = `"${value.replace(/"/g, '""')}"`;
-            }
-            return value;
-          })
-          .join(",")
-      ),
-    ].join("\n");
-    const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = filename;
-    a.click();
-    URL.revokeObjectURL(url);
+  const handleUpdateUser = async () => {
+    if (!editingUser) return;
+    const db = getDbClient();
+    if (!db) return;
+
+    try {
+      // Filter out undefined values
+      const updateData: any = {};
+      if (editingUser.name !== undefined) updateData.name = editingUser.name;
+      if (editingUser.email !== undefined) updateData.email = editingUser.email;
+      if (editingUser.phone !== undefined) updateData.phone = editingUser.phone;
+      if (editingUser.bloodGroup !== undefined) updateData.bloodGroup = editingUser.bloodGroup;
+      if (editingUser.city !== undefined) updateData.city = editingUser.city;
+      if (editingUser.state !== undefined) updateData.state = editingUser.state;
+      if (editingUser.address !== undefined) updateData.address = editingUser.address;
+      if (editingUser.age !== undefined) updateData.age = editingUser.age;
+      if (editingUser.role !== undefined) updateData.role = editingUser.role;
+
+      await updateDoc(doc(db, "users", editingUser.id), updateData);
+      toast.success("User updated successfully");
+      setIsEditUserOpen(false);
+      setEditingUser(null);
+      fetchStats();
+    } catch (error) {
+      console.error("Error updating user:", error);
+      toast.error("Failed to update user");
+    }
   };
 
-  // --- Render ---
-  if (!isAuthenticated) {
-    return (
-      <div className="min-h-screen flex items-center justify-center px-4 bg-gray-100">
-        <div className="bg-white border border-gray-300 rounded-lg p-8 max-w-md w-full shadow-lg">
-          <h1 className="text-3xl font-bold mb-6 text-center text-blue-700">Admin Login</h1>
-          <form onSubmit={handleLogin}>
-            <div className="mb-4">
-              <label className="block text-sm font-medium mb-2 text-gray-700">Admin Password</label>
-              <input
-                type="password"
-                value={adminPassword}
-                onChange={(e) => setAdminPassword(e.target.value)}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                required
-              />
-            </div>
-            {loginError && <p className="text-red-500 text-sm mb-4">{loginError}</p>}
-            <button
-              type="submit"
-              className="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
-            >
-              Login
-            </button>
-          </form>
-        </div>
-      </div>
-    );
-  }
+  const handleDeleteUser = async (id: string) => {
+    if (!confirm("Are you sure you want to delete this user?")) return;
+    const db = getDbClient();
+    if (!db) return;
+
+    try {
+      await deleteDoc(doc(db, "users", id));
+      toast.success("User deleted successfully");
+      fetchStats();
+    } catch (error) {
+      console.error("Error deleting user:", error);
+      toast.error("Failed to delete user");
+    }
+  };
 
   return (
-    <div className="p-6">
-      <HeroHeader />
-
-      {/* Main Stats Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-        <Card>
-          <CardHeader>
-            <CardTitle>Total Donors</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <p className="text-3xl font-bold">{stats.totalDonors}</p>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardHeader>
-            <CardTitle>Total Receivers</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <p className="text-3xl font-bold">{stats.totalReceivers}</p>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardHeader>
-            <CardTitle>Open Requests</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <p className="text-3xl font-bold">{stats.openRequests}</p>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardHeader>
-            <CardTitle>Fulfilled Requests</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <p className="text-3xl font-bold">{stats.fulfilledRequests}</p>
-          </CardContent>
-        </Card>
+    <div className="min-h-screen bg-gradient-to-br from-background via-card/20 to-background p-4 md:p-8">
+      {/* Header */}
+      <div className="mb-8">
+        <h1 className="text-4xl md:text-5xl font-bold mb-2 bg-gradient-to-r from-red-500 to-red-700 bg-clip-text text-transparent">
+          Admin Dashboard
+        </h1>
+        <p className="text-gray-400">Manage donors, requests, and monitor platform stats</p>
       </div>
 
-      {/* Detailed Stats and Recent Activities */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
-        <Card>
-          <CardHeader>
-            <CardTitle>Donors by Blood Group</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <ul className="list-disc pl-5">
-              {Object.entries(stats.donorsByBloodGroup).map(([group, count]) => (
-                <li key={group}>
-                  {group}: {count}
-                </li>
-              ))}
-            </ul>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardHeader>
-            <CardTitle>Requests by Blood Group</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <ul className="list-disc pl-5">
-              {Object.entries(stats.requestsByBloodGroup).map(([group, count]) => (
-                <li key={group}>
-                  {group}: {count}
-                </li>
-              ))}
-            </ul>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardHeader>
-            <CardTitle>Requests by Urgency</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <ul className="list-disc pl-5">
-              {Object.entries(stats.requestsByUrgency).map(([urgency, count]) => (
-                <li key={urgency}>
-                  {urgency}: {count}
-                </li>
-              ))}
-            </ul>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardHeader>
-            <CardTitle>Recent Blood Requests</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead>Blood Group</TableHead>
-                  <TableHead>City</TableHead>
-                  <TableHead>Urgency</TableHead>
-                  <TableHead>Status</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {recentRequests.map((request) => (
-                  <TableRow key={request.id}>
-                    <TableCell>{request.bloodGroup}</TableCell>
-                    <TableCell>{request.city}</TableCell>
-                    <TableCell>{request.urgency}</TableCell>
-                    <TableCell>{request.status}</TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </CardContent>
-        </Card>
+      {/* Tab Navigation */}
+      <div className="flex gap-2 mb-8 border-b border-gray-800 overflow-x-auto">
+        <button
+          onClick={() => setActiveTab("overview")}
+          className={`px-6 py-3 font-semibold transition-all duration-200 border-b-2 whitespace-nowrap ${
+            activeTab === "overview"
+              ? "border-red-600 text-red-500"
+              : "border-transparent text-gray-400 hover:text-white"
+          }`}
+        >
+          📊 Overview
+        </button>
+        <button
+          onClick={() => setActiveTab("donors")}
+          className={`px-6 py-3 font-semibold transition-all duration-200 border-b-2 whitespace-nowrap ${
+            activeTab === "donors"
+              ? "border-red-600 text-red-500"
+              : "border-transparent text-gray-400 hover:text-white"
+          }`}
+        >
+          👥 Donors ({stats.totalDonors})
+        </button>
+        <button
+          onClick={() => setActiveTab("requests")}
+          className={`px-6 py-3 font-semibold transition-all duration-200 border-b-2 whitespace-nowrap ${
+            activeTab === "requests"
+              ? "border-red-600 text-red-500"
+              : "border-transparent text-gray-400 hover:text-white"
+          }`}
+        >
+          🆘 Requests ({stats.totalRequests})
+        </button>
+        <button
+          onClick={() => setActiveTab("users")}
+          className={`px-6 py-3 font-semibold transition-all duration-200 border-b-2 whitespace-nowrap ${
+            activeTab === "users"
+              ? "border-red-600 text-red-500"
+              : "border-transparent text-gray-400 hover:text-white"
+          }`}
+        >
+          👤 Users ({stats.totalUsers})
+        </button>
       </div>
 
-      {/* --- User Management Table --- */}
-      <Card className="mb-8">
-        <CardHeader>
-          <CardTitle>
-            User Management
-            <button
-              onClick={() =>
-                exportCSV(
-                  users,
-                  "users.csv",
-                  ["id", "name", "email", "role", "bloodGroup", "city", "state"]
-                )
-              }
-              className="ml-4 bg-green-600 text-white px-2 py-1 rounded"
-            >
-              Export Users (CSV)
-            </button>
-          </CardTitle>
-        </CardHeader>
-        <CardContent>
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>Name</TableHead>
-                <TableHead>Email</TableHead>
-                <TableHead>Role</TableHead>
-                <TableHead>Blood Group</TableHead>
-                <TableHead>City</TableHead>
-                <TableHead>State</TableHead>
-                <TableHead>Actions</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {users.map((user) =>
-                editUserId === user.id ? (
-                  <TableRow key={user.id}>
-                    <TableCell>
-                      <input
-                        name="name"
-                        value={editUserData.name || ""}
-                        onChange={handleEditUserChange}
-                        className="border px-2 py-1 rounded"
-                      />
-                    </TableCell>
-                    <TableCell>
-                      <input
-                        name="email"
-                        value={editUserData.email || ""}
-                        onChange={handleEditUserChange}
-                        className="border px-2 py-1 rounded"
-                      />
-                    </TableCell>
-                    <TableCell>
-                      <select
-                        name="role"
-                        value={editUserData.role || ""}
-                        onChange={handleEditUserChange}
-                        className="border px-2 py-1 rounded"
-                      >
-                        <option value="donor">Donor</option>
-                        <option value="receiver">Receiver</option>
-                        <option value="admin">Admin</option>
-                      </select>
-                    </TableCell>
-                    <TableCell>
-                      <input
-                        name="bloodGroup"
-                        value={editUserData.bloodGroup || ""}
-                        onChange={handleEditUserChange}
-                        className="border px-2 py-1 rounded"
-                      />
-                    </TableCell>
-                    <TableCell>
-                      <input
-                        name="city"
-                        value={editUserData.city || ""}
-                        onChange={handleEditUserChange}
-                        className="border px-2 py-1 rounded"
-                      />
-                    </TableCell>
-                    <TableCell>
-                      <input
-                        name="state"
-                        value={editUserData.state || ""}
-                        onChange={handleEditUserChange}
-                        className="border px-2 py-1 rounded"
-                      />
-                    </TableCell>
-                    <TableCell>
-                      <button
-                        onClick={handleSaveUser}
-                        disabled={loading}
-                        className="bg-green-600 text-white px-2 py-1 rounded mr-2"
-                      >
-                        Save
-                      </button>
-                      <button
-                        onClick={() => setEditUserId(null)}
-                        className="bg-gray-400 text-white px-2 py-1 rounded"
-                      >
-                        Cancel
-                      </button>
-                    </TableCell>
-                  </TableRow>
-                ) : (
-                  <TableRow key={user.id}>
-                    <TableCell>{user.name}</TableCell>
-                    <TableCell>{user.email}</TableCell>
-                    <TableCell>{user.role}</TableCell>
-                    <TableCell>{user.bloodGroup}</TableCell>
-                    <TableCell>{user.city}</TableCell>
-                    <TableCell>{user.state}</TableCell>
-                    <TableCell>
-                      <button
-                        onClick={() => handleEditUser(user)}
-                        className="bg-blue-600 text-white px-2 py-1 rounded mr-2"
-                      >
-                        Edit
-                      </button>
-                      <button
-                        onClick={() => handleDeleteUser(user.id)}
-                        disabled={loading}
-                        className="bg-red-600 text-white px-2 py-1 rounded"
-                      >
-                        Delete
-                      </button>
-                    </TableCell>
-                  </TableRow>
-                )
-              )}
-            </TableBody>
-          </Table>
-        </CardContent>
-      </Card>
+      {/* Overview Tab */}
+      {activeTab === "overview" && (
+        <div className="space-y-8">
+          {/* Main Stats Grid */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            <Card className="bg-gradient-to-br from-blue-900/20 to-blue-800/10 border-blue-800/30 hover:border-blue-600/50 transition-all duration-300 hover:scale-105">
+              <CardHeader>
+                <CardTitle className="text-blue-400 flex items-center gap-2">
+                  <span className="text-2xl">👥</span> Total Donors
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <p className="text-5xl font-bold text-blue-500">{stats.totalDonors}</p>
+                <p className="text-sm text-gray-500 mt-2">Registered donors</p>
+              </CardContent>
+            </Card>
 
-      {/* --- Blood Request Management Table --- */}
-      <Card>
-        <CardHeader>
-          <CardTitle>
-            Blood Request Management
-            <button
-              onClick={() =>
-                exportCSV(
-                  requests,
-                  "requests.csv",
-                  ["id", "bloodGroup", "city", "urgency", "status", "createdAt"]
-                )
-              }
-              className="ml-4 bg-green-600 text-white px-2 py-1 rounded"
-            >
-              Export Requests (CSV)
-            </button>
-          </CardTitle>
-        </CardHeader>
-        <CardContent>
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>Blood Group</TableHead>
-                <TableHead>City</TableHead>
-                <TableHead>Urgency</TableHead>
-                <TableHead>Status</TableHead>
-                <TableHead>Created At</TableHead>
-                <TableHead>Actions</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {requests.map((req) =>
-                editRequestId === req.id ? (
-                  <TableRow key={req.id}>
-                    <TableCell>
-                      <input
-                        name="bloodGroup"
-                        value={editRequestData.bloodGroup || ""}
-                        onChange={handleEditRequestChange}
-                        className="border px-2 py-1 rounded"
-                      />
-                    </TableCell>
-                    <TableCell>
-                      <input
-                        name="city"
-                        value={editRequestData.city || ""}
-                        onChange={handleEditRequestChange}
-                        className="border px-2 py-1 rounded"
-                      />
-                    </TableCell>
-                    <TableCell>
-                      <input
-                        name="urgency"
-                        value={editRequestData.urgency || ""}
-                        onChange={handleEditRequestChange}
-                        className="border px-2 py-1 rounded"
-                      />
-                    </TableCell>
-                    <TableCell>
-                      <select
-                        name="status"
-                        value={editRequestData.status || ""}
-                        onChange={handleEditRequestChange}
-                        className="border px-2 py-1 rounded"
-                      >
-                        <option value="open">Open</option>
-                        <option value="fulfilled">Fulfilled</option>
-                        <option value="cancelled">Cancelled</option>
-                      </select>
-                    </TableCell>
-                    <TableCell>
-                      {req.createdAt ? new Date(req.createdAt).toLocaleString() : ""}
-                    </TableCell>
-                    <TableCell>
-                      <button
-                        onClick={handleSaveRequest}
-                        disabled={loading}
-                        className="bg-green-600 text-white px-2 py-1 rounded mr-2"
-                      >
-                        Save
-                      </button>
-                      <button
-                        onClick={() => setEditRequestId(null)}
-                        className="bg-gray-400 text-white px-2 py-1 rounded"
-                      >
-                        Cancel
-                      </button>
-                    </TableCell>
-                  </TableRow>
+            <Card className="bg-gradient-to-br from-green-900/20 to-green-800/10 border-green-800/30 hover:border-green-600/50 transition-all duration-300 hover:scale-105">
+              <CardHeader>
+                <CardTitle className="text-green-400 flex items-center gap-2">
+                  <span className="text-2xl">📋</span> Total Requests
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <p className="text-5xl font-bold text-green-500">{stats.totalRequests}</p>
+                <p className="text-sm text-gray-500 mt-2">All blood requests</p>
+              </CardContent>
+            </Card>
+
+            <Card className="bg-gradient-to-br from-orange-900/20 to-orange-800/10 border-orange-800/30 hover:border-orange-600/50 transition-all duration-300 hover:scale-105">
+              <CardHeader>
+                <CardTitle className="text-orange-400 flex items-center gap-2">
+                  <span className="text-2xl">🚨</span> Open Requests
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <p className="text-5xl font-bold text-orange-500">{stats.openRequests}</p>
+                <p className="text-sm text-gray-500 mt-2">Pending requests</p>
+              </CardContent>
+            </Card>
+
+            <Card className="bg-gradient-to-br from-red-900/20 to-red-800/10 border-red-800/30 hover:border-red-600/50 transition-all duration-300 hover:scale-105">
+              <CardHeader>
+                <CardTitle className="text-red-400 flex items-center gap-2">
+                  <span className="text-2xl">✅</span> Fulfilled
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <p className="text-5xl font-bold text-red-500">{stats.fulfilledRequests}</p>
+                <p className="text-sm text-gray-500 mt-2">Completed requests</p>
+              </CardContent>
+            </Card>
+          </div>
+
+          {/* Charts Grid */}
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            <Card className="bg-card/50 border-gray-800">
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <span className="text-xl">🩸</span> Donors by Blood Group
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-3">
+                  {BLOOD_GROUPS.map((group) => (
+                    <div key={group} className="flex items-center justify-between">
+                      <span className="font-semibold text-red-500">{group}</span>
+                      <div className="flex items-center gap-3 flex-1 ml-4">
+                        <div className="flex-1 bg-gray-800 rounded-full h-2 overflow-hidden">
+                          <div
+                            className="bg-red-600 h-full rounded-full transition-all duration-500"
+                            style={{
+                              width: `${((stats.donorsByBloodGroup[group] || 0) / stats.totalDonors) * 100}%`,
+                            }}
+                          ></div>
+                        </div>
+                        <span className="text-sm font-bold w-8 text-right">
+                          {stats.donorsByBloodGroup[group] || 0}
+                        </span>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </CardContent>
+            </Card>
+
+            <Card className="bg-card/50 border-gray-800">
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <span className="text-xl">📊</span> Requests by Blood Group
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-3">
+                  {BLOOD_GROUPS.map((group) => (
+                    <div key={group} className="flex items-center justify-between">
+                      <span className="font-semibold text-orange-500">{group}</span>
+                      <div className="flex items-center gap-3 flex-1 ml-4">
+                        <div className="flex-1 bg-gray-800 rounded-full h-2 overflow-hidden">
+                          <div
+                            className="bg-orange-600 h-full rounded-full transition-all duration-500"
+                            style={{
+                              width: `${((stats.requestsByBloodGroup[group] || 0) / stats.totalRequests) * 100}%`,
+                            }}
+                          ></div>
+                        </div>
+                        <span className="text-sm font-bold w-8 text-right">
+                          {stats.requestsByBloodGroup[group] || 0}
+                        </span>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </CardContent>
+            </Card>
+
+            <Card className="bg-card/50 border-gray-800">
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <span className="text-xl">⚠️</span> Requests by Urgency
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                {Object.keys(stats.requestsByUrgency).length === 0 ? (
+                  <div className="text-center py-8 text-gray-400">
+                    <p>No urgency data available</p>
+                  </div>
                 ) : (
-                  <TableRow key={req.id}>
-                    <TableCell>{req.bloodGroup}</TableCell>
-                    <TableCell>{req.city}</TableCell>
-                    <TableCell>{req.urgency}</TableCell>
-                    <TableCell>{req.status}</TableCell>
-                    <TableCell>
-                      {req.createdAt ? new Date(req.createdAt).toLocaleString() : ""}
-                    </TableCell>
-                    <TableCell>
-                      <button
-                        onClick={() => handleEditRequest(req)}
-                        className="bg-blue-600 text-white px-2 py-1 rounded mr-2"
-                      >
-                        Edit
-                      </button>
-                      <button
-                        onClick={() => handleDeleteRequest(req.id)}
-                        disabled={loading}
-                        className="bg-red-600 text-white px-2 py-1 rounded"
-                      >
-                        Delete
-                      </button>
-                    </TableCell>
+                  <div className="space-y-4">
+                    {Object.entries(stats.requestsByUrgency)
+                      .sort((a, b) => {
+                        const order = { critical: 0, high: 1, medium: 2, low: 3 };
+                        const aKey = a[0].toLowerCase();
+                        const bKey = b[0].toLowerCase();
+                        return (order[aKey as keyof typeof order] ?? 999) - (order[bKey as keyof typeof order] ?? 999);
+                      })
+                      .map(([urgency, count]) => (
+                        <div key={urgency} className="flex items-center justify-between">
+                          <div className="flex items-center gap-2">
+                            <div
+                              className={`w-3 h-3 rounded-full ${
+                                urgency.toLowerCase() === "critical"
+                                  ? "bg-red-600"
+                                  : urgency.toLowerCase() === "high"
+                                  ? "bg-orange-600"
+                                  : urgency.toLowerCase() === "medium"
+                                  ? "bg-yellow-600"
+                                  : "bg-green-600"
+                              }`}
+                            ></div>
+                            <span className="font-medium capitalize">{urgency}</span>
+                          </div>
+                          <span className="text-2xl font-bold">{count}</span>
+                        </div>
+                      ))}
+                  </div>
+                )}
+              </CardContent>
+            </Card>
+          </div>
+
+          {/* Recent Requests */}
+          <Card className="bg-card/50 border-gray-800">
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <span className="text-xl">🕐</span> Recent Blood Requests
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="overflow-x-auto">
+                <Table>
+                  <TableHeader>
+                    <TableRow className="border-gray-800">
+                      <TableHead>Name</TableHead>
+                      <TableHead>Blood Group</TableHead>
+                      <TableHead>City</TableHead>
+                      <TableHead>Hospital</TableHead>
+                      <TableHead>Urgency</TableHead>
+                      <TableHead>Status</TableHead>
+                      <TableHead>Units</TableHead>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    {recentRequests.map((request) => (
+                      <TableRow key={request.id} className="border-gray-800 hover:bg-gray-900/50">
+                        <TableCell className="font-medium">{request.name}</TableCell>
+                        <TableCell>
+                          <span className="px-2 py-1 bg-red-900/30 text-red-400 rounded font-semibold">
+                            {request.bloodGroup}
+                          </span>
+                        </TableCell>
+                        <TableCell className="text-gray-400">{request.city}</TableCell>
+                        <TableCell className="text-gray-400">{request.hospital}</TableCell>
+                        <TableCell>
+                          <span
+                            className={`px-2 py-1 rounded-full text-xs font-semibold ${
+                              request.urgency === "critical"
+                                ? "bg-red-900/30 text-red-400"
+                                : request.urgency === "high"
+                                ? "bg-orange-900/30 text-orange-400"
+                                : "bg-green-900/30 text-green-400"
+                            }`}
+                          >
+                            {request.urgency}
+                          </span>
+                        </TableCell>
+                        <TableCell>
+                          <span
+                            className={`px-2 py-1 rounded-full text-xs font-semibold ${
+                              request.status === "open"
+                                ? "bg-orange-900/30 text-orange-400"
+                                : "bg-green-900/30 text-green-400"
+                            }`}
+                          >
+                            {request.status}
+                          </span>
+                        </TableCell>
+                        <TableCell className="font-bold">{request.unitsNeeded}</TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+      )}
+
+      {/* Donors Tab */}
+      {activeTab === "donors" && (
+        <Card className="bg-card/50 border-gray-800">
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <span className="text-xl">👥</span> All Donors
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="overflow-x-auto">
+              <Table>
+                <TableHeader>
+                  <TableRow className="border-gray-800">
+                    <TableHead>Name</TableHead>
+                    <TableHead>Blood Group</TableHead>
+                    <TableHead>Phone</TableHead>
+                    <TableHead>City</TableHead>
+                    <TableHead>Age</TableHead>
+                    <TableHead>Gender</TableHead>
+                    <TableHead>Available</TableHead>
+                    <TableHead>Actions</TableHead>
                   </TableRow>
-                )
-              )}
-            </TableBody>
-          </Table>
-        </CardContent>
-      </Card>
+                </TableHeader>
+                <TableBody>
+                  {allDonors.map((donor) => (
+                    <TableRow key={donor.id} className="border-gray-800 hover:bg-gray-900/50">
+                      <TableCell className="font-medium">{donor.fullName || donor.name}</TableCell>
+                      <TableCell>
+                        <span className="px-2 py-1 bg-red-900/30 text-red-400 rounded font-semibold">
+                          {donor.bloodGroup}
+                        </span>
+                      </TableCell>
+                      <TableCell className="text-gray-400">{donor.phone || donor.phoneNumber}</TableCell>
+                      <TableCell className="text-gray-400">{donor.city}</TableCell>
+                      <TableCell className="text-gray-400">{donor.age}</TableCell>
+                      <TableCell className="text-gray-400 capitalize">{donor.gender}</TableCell>
+                      <TableCell>
+                        <span
+                          className={`px-2 py-1 rounded-full text-xs font-semibold ${
+                            donor.available
+                              ? "bg-green-900/30 text-green-400"
+                              : "bg-gray-900/30 text-gray-400"
+                          }`}
+                        >
+                          {donor.available ? "Available" : "Not Available"}
+                        </span>
+                      </TableCell>
+                      <TableCell>
+                        <div className="flex gap-2">
+                          <Dialog open={isEditDonorOpen && editingDonor?.id === donor.id} onOpenChange={(open) => {
+                            setIsEditDonorOpen(open);
+                            if (!open) setEditingDonor(null);
+                          }}>
+                            <DialogTrigger asChild>
+                              <Button
+                                size="sm"
+                                variant="outline"
+                                className="bg-blue-900/20 border-blue-800 text-blue-400 hover:bg-blue-900/40"
+                                onClick={() => setEditingDonor(donor)}
+                              >
+                                ✏️ Edit
+                              </Button>
+                            </DialogTrigger>
+                            <DialogContent className="bg-card border-gray-800 max-w-2xl max-h-[90vh] overflow-y-auto">
+                              <DialogHeader>
+                                <DialogTitle>Edit Donor</DialogTitle>
+                                <DialogDescription>Update donor information</DialogDescription>
+                              </DialogHeader>
+                              {editingDonor && (
+                                <div className="grid gap-4 py-4">
+                                  <div className="grid grid-cols-2 gap-4">
+                                    <div>
+                                      <Label htmlFor="fullName">Full Name</Label>
+                                      <Input
+                                        id="fullName"
+                                        value={editingDonor.fullName}
+                                        onChange={(e) =>
+                                          setEditingDonor({ ...editingDonor, fullName: e.target.value, name: e.target.value })
+                                        }
+                                      />
+                                    </div>
+                                    <div>
+                                      <Label htmlFor="phone">Phone</Label>
+                                      <Input
+                                        id="phone"
+                                        value={editingDonor.phone || editingDonor.phoneNumber}
+                                        onChange={(e) =>
+                                          setEditingDonor({ ...editingDonor, phone: e.target.value, phoneNumber: e.target.value })
+                                        }
+                                      />
+                                    </div>
+                                  </div>
+                                  <div className="grid grid-cols-2 gap-4">
+                                    <div>
+                                      <Label htmlFor="bloodGroup">Blood Group</Label>
+                                      <Select
+                                        value={editingDonor.bloodGroup}
+                                        onValueChange={(value) =>
+                                          setEditingDonor({ ...editingDonor, bloodGroup: value })
+                                        }
+                                      >
+                                        <SelectTrigger>
+                                          <SelectValue />
+                                        </SelectTrigger>
+                                        <SelectContent>
+                                          {BLOOD_GROUPS.map((bg) => (
+                                            <SelectItem key={bg} value={bg}>
+                                              {bg}
+                                            </SelectItem>
+                                          ))}
+                                        </SelectContent>
+                                      </Select>
+                                    </div>
+                                    <div>
+                                      <Label htmlFor="age">Age</Label>
+                                      <Input
+                                        id="age"
+                                        type="number"
+                                        value={editingDonor.age}
+                                        onChange={(e) =>
+                                          setEditingDonor({ ...editingDonor, age: parseInt(e.target.value) })
+                                        }
+                                      />
+                                    </div>
+                                  </div>
+                                  <div className="grid grid-cols-2 gap-4">
+                                    <div>
+                                      <Label htmlFor="state">State</Label>
+                                      <Select
+                                        value={editingDonor.state}
+                                        onValueChange={(value) =>
+                                          setEditingDonor({ ...editingDonor, state: value })
+                                        }
+                                      >
+                                        <SelectTrigger>
+                                          <SelectValue />
+                                        </SelectTrigger>
+                                        <SelectContent>
+                                          {INDIAN_STATES.map((state) => (
+                                            <SelectItem key={state} value={state}>
+                                              {state}
+                                            </SelectItem>
+                                          ))}
+                                        </SelectContent>
+                                      </Select>
+                                    </div>
+                                    <div>
+                                      <Label htmlFor="city">City</Label>
+                                      <Input
+                                        id="city"
+                                        value={editingDonor.city}
+                                        onChange={(e) =>
+                                          setEditingDonor({ ...editingDonor, city: e.target.value })
+                                        }
+                                      />
+                                    </div>
+                                  </div>
+                                  <div className="grid grid-cols-2 gap-4">
+                                    <div>
+                                      <Label htmlFor="gender">Gender</Label>
+                                      <Select
+                                        value={editingDonor.gender}
+                                        onValueChange={(value: "male" | "female" | "other") =>
+                                          setEditingDonor({ ...editingDonor, gender: value })
+                                        }
+                                      >
+                                        <SelectTrigger>
+                                          <SelectValue />
+                                        </SelectTrigger>
+                                        <SelectContent>
+                                          <SelectItem value="male">Male</SelectItem>
+                                          <SelectItem value="female">Female</SelectItem>
+                                          <SelectItem value="other">Other</SelectItem>
+                                        </SelectContent>
+                                      </Select>
+                                    </div>
+                                    <div>
+                                      <Label htmlFor="available">Availability</Label>
+                                      <Select
+                                        value={editingDonor.available ? "true" : "false"}
+                                        onValueChange={(value) =>
+                                          setEditingDonor({ ...editingDonor, available: value === "true" })
+                                        }
+                                      >
+                                        <SelectTrigger>
+                                          <SelectValue />
+                                        </SelectTrigger>
+                                        <SelectContent>
+                                          <SelectItem value="true">Available</SelectItem>
+                                          <SelectItem value="false">Not Available</SelectItem>
+                                        </SelectContent>
+                                      </Select>
+                                    </div>
+                                  </div>
+                                  <Button onClick={handleUpdateDonor} className="bg-red-600 hover:bg-red-700">
+                                    Save Changes
+                                  </Button>
+                                </div>
+                              )}
+                            </DialogContent>
+                          </Dialog>
+                          <Button
+                            size="sm"
+                            variant="outline"
+                            className="bg-red-900/20 border-red-800 text-red-400 hover:bg-red-900/40"
+                            onClick={() => handleDeleteDonor(donor.id)}
+                          >
+                            🗑️ Delete
+                          </Button>
+                        </div>
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </div>
+          </CardContent>
+        </Card>
+      )}
+
+      {/* Requests Tab */}
+      {activeTab === "requests" && (
+        <Card className="bg-card/50 border-gray-800">
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <span className="text-xl">🆘</span> All Blood Requests
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="overflow-x-auto">
+              <Table>
+                <TableHeader>
+                  <TableRow className="border-gray-800">
+                    <TableHead>Name</TableHead>
+                    <TableHead>Blood Group</TableHead>
+                    <TableHead>Phone</TableHead>
+                    <TableHead>Hospital</TableHead>
+                    <TableHead>City</TableHead>
+                    <TableHead>Units</TableHead>
+                    <TableHead>Urgency</TableHead>
+                    <TableHead>Status</TableHead>
+                    <TableHead>Actions</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {allRequests.map((request) => (
+                    <TableRow key={request.id} className="border-gray-800 hover:bg-gray-900/50">
+                      <TableCell className="font-medium">{request.name}</TableCell>
+                      <TableCell>
+                        <span className="px-2 py-1 bg-red-900/30 text-red-400 rounded font-semibold">
+                          {request.bloodGroup}
+                        </span>
+                      </TableCell>
+                      <TableCell className="text-gray-400">{request.phone}</TableCell>
+                      <TableCell className="text-gray-400">{request.hospital}</TableCell>
+                      <TableCell className="text-gray-400">{request.city}</TableCell>
+                      <TableCell className="font-bold">{request.unitsNeeded}</TableCell>
+                      <TableCell>
+                        <span
+                          className={`px-2 py-1 rounded-full text-xs font-semibold ${
+                            request.urgency === "critical"
+                              ? "bg-red-900/30 text-red-400"
+                              : request.urgency === "high"
+                              ? "bg-orange-900/30 text-orange-400"
+                              : "bg-green-900/30 text-green-400"
+                          }`}
+                        >
+                          {request.urgency}
+                        </span>
+                      </TableCell>
+                      <TableCell>
+                        <span
+                          className={`px-2 py-1 rounded-full text-xs font-semibold ${
+                            request.status === "open"
+                              ? "bg-orange-900/30 text-orange-400"
+                              : "bg-green-900/30 text-green-400"
+                          }`}
+                        >
+                          {request.status}
+                        </span>
+                      </TableCell>
+                      <TableCell>
+                        <div className="flex gap-2">
+                          <Dialog open={isEditRequestOpen && editingRequest?.id === request.id} onOpenChange={(open) => {
+                            setIsEditRequestOpen(open);
+                            if (!open) setEditingRequest(null);
+                          }}>
+                            <DialogTrigger asChild>
+                              <Button
+                                size="sm"
+                                variant="outline"
+                                className="bg-blue-900/20 border-blue-800 text-blue-400 hover:bg-blue-900/40"
+                                onClick={() => setEditingRequest(request)}
+                              >
+                                ✏️ Edit
+                              </Button>
+                            </DialogTrigger>
+                            <DialogContent className="bg-card border-gray-800 max-w-2xl max-h-[90vh] overflow-y-auto">
+                              <DialogHeader>
+                                <DialogTitle>Edit Blood Request</DialogTitle>
+                                <DialogDescription>Update request information and status</DialogDescription>
+                              </DialogHeader>
+                              {editingRequest && (
+                                <div className="grid gap-4 py-4">
+                                  <div className="grid grid-cols-2 gap-4">
+                                    <div>
+                                      <Label htmlFor="name">Name</Label>
+                                      <Input
+                                        id="name"
+                                        value={editingRequest.name}
+                                        onChange={(e) =>
+                                          setEditingRequest({ ...editingRequest, name: e.target.value })
+                                        }
+                                      />
+                                    </div>
+                                    <div>
+                                      <Label htmlFor="reqPhone">Phone</Label>
+                                      <Input
+                                        id="reqPhone"
+                                        value={editingRequest.phone}
+                                        onChange={(e) =>
+                                          setEditingRequest({ ...editingRequest, phone: e.target.value })
+                                        }
+                                      />
+                                    </div>
+                                  </div>
+                                  <div className="grid grid-cols-2 gap-4">
+                                    <div>
+                                      <Label htmlFor="reqBloodGroup">Blood Group</Label>
+                                      <Select
+                                        value={editingRequest.bloodGroup}
+                                        onValueChange={(value) =>
+                                          setEditingRequest({ ...editingRequest, bloodGroup: value })
+                                        }
+                                      >
+                                        <SelectTrigger>
+                                          <SelectValue />
+                                        </SelectTrigger>
+                                        <SelectContent>
+                                          {BLOOD_GROUPS.map((bg) => (
+                                            <SelectItem key={bg} value={bg}>
+                                              {bg}
+                                            </SelectItem>
+                                          ))}
+                                        </SelectContent>
+                                      </Select>
+                                    </div>
+                                    <div>
+                                      <Label htmlFor="unitsNeeded">Units Needed</Label>
+                                      <Input
+                                        id="unitsNeeded"
+                                        type="number"
+                                        value={editingRequest.unitsNeeded}
+                                        onChange={(e) =>
+                                          setEditingRequest({ ...editingRequest, unitsNeeded: parseInt(e.target.value) })
+                                        }
+                                      />
+                                    </div>
+                                  </div>
+                                  <div>
+                                    <Label htmlFor="hospital">Hospital</Label>
+                                    <Input
+                                      id="hospital"
+                                      value={editingRequest.hospital}
+                                      onChange={(e) =>
+                                        setEditingRequest({ ...editingRequest, hospital: e.target.value })
+                                      }
+                                    />
+                                  </div>
+                                  <div className="grid grid-cols-2 gap-4">
+                                    <div>
+                                      <Label htmlFor="reqState">State</Label>
+                                      <Select
+                                        value={editingRequest.state}
+                                        onValueChange={(value) =>
+                                          setEditingRequest({ ...editingRequest, state: value })
+                                        }
+                                      >
+                                        <SelectTrigger>
+                                          <SelectValue />
+                                        </SelectTrigger>
+                                        <SelectContent>
+                                          {INDIAN_STATES.map((state) => (
+                                            <SelectItem key={state} value={state}>
+                                              {state}
+                                            </SelectItem>
+                                          ))}
+                                        </SelectContent>
+                                      </Select>
+                                    </div>
+                                    <div>
+                                      <Label htmlFor="reqCity">City</Label>
+                                      <Input
+                                        id="reqCity"
+                                        value={editingRequest.city}
+                                        onChange={(e) =>
+                                          setEditingRequest({ ...editingRequest, city: e.target.value })
+                                        }
+                                      />
+                                    </div>
+                                  </div>
+                                  <div className="grid grid-cols-2 gap-4">
+                                    <div>
+                                      <Label htmlFor="urgency">Urgency</Label>
+                                      <Select
+                                        value={editingRequest.urgency}
+                                        onValueChange={(value: "low" | "medium" | "high" | "critical") =>
+                                          setEditingRequest({ ...editingRequest, urgency: value })
+                                        }
+                                      >
+                                        <SelectTrigger>
+                                          <SelectValue />
+                                        </SelectTrigger>
+                                        <SelectContent>
+                                          <SelectItem value="low">Low</SelectItem>
+                                          <SelectItem value="medium">Medium</SelectItem>
+                                          <SelectItem value="high">High</SelectItem>
+                                          <SelectItem value="critical">Critical</SelectItem>
+                                        </SelectContent>
+                                      </Select>
+                                    </div>
+                                    <div>
+                                      <Label htmlFor="status">Status</Label>
+                                      <Select
+                                        value={editingRequest.status}
+                                        onValueChange={(value: "open" | "fulfilled") =>
+                                          setEditingRequest({ ...editingRequest, status: value })
+                                        }
+                                      >
+                                        <SelectTrigger>
+                                          <SelectValue />
+                                        </SelectTrigger>
+                                        <SelectContent>
+                                          <SelectItem value="open">Open</SelectItem>
+                                          <SelectItem value="fulfilled">Fulfilled</SelectItem>
+                                        </SelectContent>
+                                      </Select>
+                                    </div>
+                                  </div>
+                                  <div>
+                                    <Label htmlFor="description">Description</Label>
+                                    <Input
+                                      id="description"
+                                      value={editingRequest.description}
+                                      onChange={(e) =>
+                                        setEditingRequest({ ...editingRequest, description: e.target.value })
+                                      }
+                                    />
+                                  </div>
+                                  <Button onClick={handleUpdateRequest} className="bg-red-600 hover:bg-red-700">
+                                    Save Changes
+                                  </Button>
+                                </div>
+                              )}
+                            </DialogContent>
+                          </Dialog>
+                          <Button
+                            size="sm"
+                            variant="outline"
+                            className="bg-red-900/20 border-red-800 text-red-400 hover:bg-red-900/40"
+                            onClick={() => handleDeleteRequest(request.id)}
+                          >
+                            🗑️ Delete
+                          </Button>
+                        </div>
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </div>
+          </CardContent>
+        </Card>
+      )}
+
+      {/* Users Tab */}
+      {activeTab === "users" && (
+        <Card className="bg-card/50 border-gray-800">
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <span className="text-xl">👤</span> All Users
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            {allUsers.length === 0 ? (
+              <div className="text-center py-12">
+                <p className="text-gray-400 text-lg mb-2">No users found</p>
+                <p className="text-gray-500 text-sm">Users will appear here once they register</p>
+              </div>
+            ) : (
+              <div className="overflow-x-auto">
+                <Table>
+                  <TableHeader>
+                    <TableRow className="border-gray-800">
+                      <TableHead>Name</TableHead>
+                      <TableHead>Email</TableHead>
+                      <TableHead>Phone</TableHead>
+                      <TableHead>Blood Group</TableHead>
+                      <TableHead>Role</TableHead>
+                      <TableHead>City</TableHead>
+                      <TableHead>Age</TableHead>
+                      <TableHead>Actions</TableHead>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    {allUsers.map((user) => (
+                      <TableRow key={user.id} className="border-gray-800 hover:bg-gray-900/50">
+                        <TableCell className="font-medium">{user.name || 'N/A'}</TableCell>
+                        <TableCell className="text-gray-400">{user.email || 'N/A'}</TableCell>
+                        <TableCell className="text-gray-400">{user.phone || 'N/A'}</TableCell>
+                        <TableCell>
+                          {user.bloodGroup ? (
+                            <span className="px-2 py-1 bg-red-900/30 text-red-400 rounded font-semibold">
+                              {user.bloodGroup}
+                            </span>
+                          ) : (
+                            <span className="text-gray-500">N/A</span>
+                          )}
+                        </TableCell>
+                        <TableCell>
+                          <span
+                            className={`px-2 py-1 rounded-full text-xs font-semibold ${
+                              user.role === "donor"
+                                ? "bg-blue-900/30 text-blue-400"
+                                : "bg-green-900/30 text-green-400"
+                            }`}
+                          >
+                            {user.role}
+                          </span>
+                        </TableCell>
+                        <TableCell className="text-gray-400">{user.city || 'N/A'}</TableCell>
+                        <TableCell className="text-gray-400">{user.age || 'N/A'}</TableCell>
+                        <TableCell>
+                          <div className="flex gap-2">
+                            <Dialog open={isEditUserOpen && editingUser?.id === user.id} onOpenChange={(open) => {
+                              setIsEditUserOpen(open);
+                              if (!open) setEditingUser(null);
+                            }}>
+                              <DialogTrigger asChild>
+                                <Button
+                                  size="sm"
+                                  variant="outline"
+                                  className="bg-blue-900/20 border-blue-800 text-blue-400 hover:bg-blue-900/40"
+                                  onClick={() => setEditingUser(user)}
+                                >
+                                  ✏️ Edit
+                                </Button>
+                              </DialogTrigger>
+                              <DialogContent className="bg-card border-gray-800 max-w-2xl max-h-[90vh] overflow-y-auto">
+                                <DialogHeader>
+                                  <DialogTitle>Edit User</DialogTitle>
+                                  <DialogDescription>Update user information</DialogDescription>
+                                </DialogHeader>
+                                {editingUser && (
+                                  <div className="grid gap-4 py-4">
+                                    <div className="grid grid-cols-2 gap-4">
+                                      <div>
+                                        <Label htmlFor="userName">Name</Label>
+                                        <Input
+                                          id="userName"
+                                          value={editingUser.name}
+                                          onChange={(e) =>
+                                            setEditingUser({ ...editingUser, name: e.target.value })
+                                          }
+                                        />
+                                      </div>
+                                      <div>
+                                        <Label htmlFor="userEmail">Email</Label>
+                                        <Input
+                                          id="userEmail"
+                                          value={editingUser.email}
+                                          onChange={(e) =>
+                                            setEditingUser({ ...editingUser, email: e.target.value })
+                                          }
+                                        />
+                                      </div>
+                                    </div>
+                                    <div className="grid grid-cols-2 gap-4">
+                                      <div>
+                                        <Label htmlFor="userPhone">Phone</Label>
+                                        <Input
+                                          id="userPhone"
+                                          value={editingUser.phone}
+                                          onChange={(e) =>
+                                            setEditingUser({ ...editingUser, phone: e.target.value })
+                                          }
+                                        />
+                                      </div>
+                                      <div>
+                                        <Label htmlFor="userBloodGroup">Blood Group</Label>
+                                        <Select
+                                          value={editingUser.bloodGroup || ""}
+                                          onValueChange={(value) =>
+                                            setEditingUser({ ...editingUser, bloodGroup: value })
+                                          }
+                                        >
+                                          <SelectTrigger>
+                                            <SelectValue placeholder="Select blood group" />
+                                          </SelectTrigger>
+                                          <SelectContent>
+                                            {BLOOD_GROUPS.map((bg) => (
+                                              <SelectItem key={bg} value={bg}>
+                                                {bg}
+                                              </SelectItem>
+                                            ))}
+                                          </SelectContent>
+                                        </Select>
+                                      </div>
+                                    </div>
+                                    <div className="grid grid-cols-2 gap-4">
+                                      <div>
+                                        <Label htmlFor="userState">State</Label>
+                                        <Select
+                                          value={editingUser.state}
+                                          onValueChange={(value) =>
+                                            setEditingUser({ ...editingUser, state: value })
+                                          }
+                                        >
+                                          <SelectTrigger>
+                                            <SelectValue />
+                                          </SelectTrigger>
+                                          <SelectContent>
+                                            {INDIAN_STATES.map((state) => (
+                                              <SelectItem key={state} value={state}>
+                                                {state}
+                                              </SelectItem>
+                                            ))}
+                                          </SelectContent>
+                                        </Select>
+                                      </div>
+                                      <div>
+                                        <Label htmlFor="userCity">City</Label>
+                                        <Input
+                                          id="userCity"
+                                          value={editingUser.city}
+                                          onChange={(e) =>
+                                            setEditingUser({ ...editingUser, city: e.target.value })
+                                          }
+                                        />
+                                      </div>
+                                    </div>
+                                    <div className="grid grid-cols-2 gap-4">
+                                      <div>
+                                        <Label htmlFor="userAge">Age</Label>
+                                        <Input
+                                          id="userAge"
+                                          value={editingUser.age}
+                                          onChange={(e) =>
+                                            setEditingUser({ ...editingUser, age: e.target.value })
+                                          }
+                                        />
+                                      </div>
+                                      <div>
+                                        <Label htmlFor="userRole">Role</Label>
+                                        <Select
+                                          value={editingUser.role}
+                                          onValueChange={(value: "donor" | "receiver") =>
+                                            setEditingUser({ ...editingUser, role: value })
+                                          }
+                                        >
+                                          <SelectTrigger>
+                                            <SelectValue />
+                                          </SelectTrigger>
+                                          <SelectContent>
+                                            <SelectItem value="donor">Donor</SelectItem>
+                                            <SelectItem value="receiver">Receiver</SelectItem>
+                                          </SelectContent>
+                                        </Select>
+                                      </div>
+                                    </div>
+                                    <div>
+                                      <Label htmlFor="userAddress">Address</Label>
+                                      <Input
+                                        id="userAddress"
+                                        value={editingUser.address}
+                                        onChange={(e) =>
+                                          setEditingUser({ ...editingUser, address: e.target.value })
+                                        }
+                                      />
+                                    </div>
+                                    <Button onClick={handleUpdateUser} className="bg-red-600 hover:bg-red-700">
+                                      Save Changes
+                                    </Button>
+                                  </div>
+                                )}
+                              </DialogContent>
+                            </Dialog>
+                            <Button
+                              size="sm"
+                              variant="outline"
+                              className="bg-red-900/20 border-red-800 text-red-400 hover:bg-red-900/40"
+                              onClick={() => handleDeleteUser(user.id)}
+                            >
+                              🗑️ Delete
+                            </Button>
+                          </div>
+                        </TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              </div>
+            )}
+          </CardContent>
+        </Card>
+      )}
     </div>
   );
 }
