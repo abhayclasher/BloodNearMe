@@ -215,11 +215,11 @@ export default function Home() {
           <div className="inline-block mb-4 px-4 py-2 bg-red-600/10 border border-red-600/20 rounded-full text-red-500 text-sm font-medium">
             🩸 Connecting Lives Since 2025
           </div>
-          <h1 className="text-5xl md:text-7xl font-bold mb-6 text-balance bg-gradient-to-r from-white via-red-100 to-red-200 bg-clip-text text-transparent">
+          <h1 className="text-5xl md:text-7xl font-bold mb-6 text-balance text-white">
             Save Lives,<br />
             <span className="text-primary">Connect Blood Donors</span>
           </h1>
-          <p className="text-xl md:text-2xl text-gray-400 mb-10 text-balance max-w-3xl mx-auto leading-relaxed">
+          <p className="text-xl md:text-2xl text-white mb-10 text-balance max-w-3xl mx-auto leading-relaxed">
             Join India's fastest-growing blood donation network. Find verified donors instantly or post urgent requests — all in real-time.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
@@ -244,7 +244,7 @@ export default function Home() {
           </div>
           
           {/* Trust indicators */}
-          <div className="mt-12 flex flex-wrap justify-center gap-8 text-sm text-gray-500">
+          <div className="mt-12 flex flex-wrap justify-center gap-8 text-sm text-white">
             <div className="flex items-center gap-2">
               <svg className="w-5 h-5 text-green-500" fill="currentColor" viewBox="0 0 20 20">
                 <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
