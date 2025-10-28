@@ -3,7 +3,7 @@
   # If your Netlify environment still treats this as a workspace you can
   # switch to: pnpm --filter . build
   command = "pnpm build"
-  publish = "."
+  
 
 [context.production.environment]
   # Next 16 requires Node >= 20.9.0 — set Netlify's Node to a compatible version
