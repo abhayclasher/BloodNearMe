@@ -196,7 +196,7 @@ export default function DonorReceiverForms() {
       <div className="max-w-7xl mx-auto">
         <div className="text-center mb-12">
           <h2 className="text-4xl md:text-5xl font-bold text-white mb-4">Join Our Life-Saving Network</h2>
-          <p className="text-gray-400 text-lg">
+          <p className="text-white text-lg">
             Whether you want to donate blood or need blood, join our community and be part of India's lifeline.
           </p>
         </div>

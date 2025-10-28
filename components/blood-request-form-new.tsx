@@ -104,7 +104,7 @@ export default function BloodRequestFormNew() {
       <div className="max-w-2xl mx-auto">
         <div className="text-center mb-12">
           <h2 className="text-4xl md:text-5xl font-bold text-white mb-4">Request Blood</h2>
-          <p className="text-gray-400 text-lg">
+          <p className="text-white text-lg">
             Post your blood request and connect with nearby donors who can help save a life.
           </p>
         </div>

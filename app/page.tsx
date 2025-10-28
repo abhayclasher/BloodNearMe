@@ -19,7 +19,7 @@ function JoinNetworkSection() {
           <h2 className="text-4xl md:text-5xl font-bold mb-4 bg-gradient-to-r from-white to-gray-400 bg-clip-text text-transparent">
             Join Our Life-Saving Network
           </h2>
-          <p className="text-gray-500 text-lg max-w-2xl mx-auto">
+          <p className="text-white text-lg max-w-2xl mx-auto">
             Whether you want to donate blood or need it urgently, we're here to connect you
           </p>
         </div>
@@ -60,7 +60,7 @@ function JoinNetworkSection() {
                   <div>
                     <div className="text-5xl mb-6">🩸</div>
                     <h3 className="text-3xl font-bold mb-4 text-white">Become a Blood Donor</h3>
-                    <p className="text-gray-400 mb-6 leading-relaxed">
+                    <p className="text-white mb-6 leading-relaxed">
                       One donation can save up to three lives. Join thousands of heroes who donate blood regularly and make a real difference in your community.
                     </p>
                     <ul className="space-y-3 mb-8">
@@ -70,7 +70,7 @@ function JoinNetworkSection() {
                         "Track your donation history",
                         "Join a community of life-savers",
                       ].map((benefit, i) => (
-                        <li key={i} className="flex items-center gap-3 text-gray-300">
+                        <li key={i} className="flex items-center gap-3 text-white">
                           <svg className="w-5 h-5 text-blue-500 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
                             <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
                           </svg>
@@ -97,21 +97,21 @@ function JoinNetworkSection() {
                             <div className="text-3xl">✅</div>
                             <div>
                               <div className="font-semibold text-white">Eligibility Check</div>
-                              <div className="text-sm text-gray-400">Age 18-65, weight 50kg+</div>
+                              <div className="text-sm text-white">Age 18-65, weight 50kg+</div>
                             </div>
                           </div>
                           <div className="flex items-center gap-4 p-4 bg-cyan-900/20 rounded-xl border border-cyan-700/30">
                             <div className="text-3xl">📱</div>
                             <div>
                               <div className="font-semibold text-white">Instant Notifications</div>
-                              <div className="text-sm text-gray-400">Get alerted for nearby requests</div>
+                              <div className="text-sm text-white">Get alerted for nearby requests</div>
                             </div>
                           </div>
                           <div className="flex items-center gap-4 p-4 bg-blue-900/20 rounded-xl border border-blue-700/30">
                             <div className="text-3xl">🏆</div>
                             <div>
                               <div className="font-semibold text-white">Impact Tracking</div>
-                              <div className="text-sm text-gray-400">See lives you've helped save</div>
+                              <div className="text-sm text-white">See lives you've helped save</div>
                             </div>
                           </div>
                         </div>
@@ -131,7 +131,7 @@ function JoinNetworkSection() {
                   <div>
                     <div className="text-5xl mb-6">🆘</div>
                     <h3 className="text-3xl font-bold mb-4 text-white">Request Blood Urgently</h3>
-                    <p className="text-gray-400 mb-6 leading-relaxed">
+                    <p className="text-white mb-6 leading-relaxed">
                       In urgent need of blood? Post your requirement and connect with verified donors in your area instantly. Help is just a click away.
                     </p>
                     <ul className="space-y-3 mb-8">
@@ -141,7 +141,7 @@ function JoinNetworkSection() {
                         "Get direct contact details",
                         "Track request status in real-time",
                       ].map((benefit, i) => (
-                        <li key={i} className="flex items-center gap-3 text-gray-300">
+                        <li key={i} className="flex items-center gap-3 text-white">
                           <svg className="w-5 h-5 text-red-500 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
                             <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
                           </svg>
@@ -168,21 +168,21 @@ function JoinNetworkSection() {
                             <div className="text-3xl">⚡</div>
                             <div>
                               <div className="font-semibold text-white">Instant Posting</div>
-                              <div className="text-sm text-gray-400">Request goes live immediately</div>
+                              <div className="text-sm text-white">Request goes live immediately</div>
                             </div>
                           </div>
                           <div className="flex items-center gap-4 p-4 bg-orange-900/20 rounded-xl border border-orange-700/30">
                             <div className="text-3xl">🔍</div>
                             <div>
                               <div className="font-semibold text-white">Smart Matching</div>
-                              <div className="text-sm text-gray-400">Find matching donors nearby</div>
+                              <div className="text-sm text-white">Find matching donors nearby</div>
                             </div>
                           </div>
                           <div className="flex items-center gap-4 p-4 bg-red-900/20 rounded-xl border border-red-700/30">
                             <div className="text-3xl">💬</div>
                             <div>
                               <div className="font-semibold text-white">Direct Contact</div>
-                              <div className="text-sm text-gray-400">No intermediaries, call directly</div>
+                              <div className="text-sm text-white">No intermediaries, call directly</div>
                             </div>
                           </div>
                         </div>
@@ -272,8 +272,8 @@ export default function Home() {
       <section className="py-20 px-4 bg-gradient-to-b from-background to-card/30">
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-16">
-            <h2 className="text-4xl md:text-5xl font-bold mb-4 bg-gradient-to-r from-white to-gray-400 bg-clip-text text-transparent">How It Works</h2>
-            <p className="text-gray-500 text-lg">Three simple steps to save a life</p>
+            <h2 className="text-4xl md:text-5xl font-bold mb-4 text-white">How It Works</h2>
+            <p className="text-white text-lg">Three simple steps to save a life</p>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {[
@@ -310,7 +310,7 @@ export default function Home() {
                   {feature.icon}
                 </div>
                 <h3 className="text-2xl font-bold mb-4 text-white">{feature.title}</h3>
-                <p className="text-gray-400 leading-relaxed">{feature.description}</p>
+                <p className="text-white leading-relaxed">{feature.description}</p>
                 <div className="absolute bottom-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity">
                   <svg className="w-6 h-6 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
@@ -330,7 +330,7 @@ export default function Home() {
         <div className="max-w-6xl mx-auto relative z-10">
           <div className="text-center mb-16">
             <h2 className="text-4xl md:text-5xl font-bold mb-4">Our Impact</h2>
-            <p className="text-gray-500 text-lg">Making a difference, one donation at a time</p>
+            <p className="text-white text-lg">Making a difference, one donation at a time</p>
           </div>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
             {[
@@ -344,7 +344,7 @@ export default function Home() {
                 <div className={`text-5xl md:text-6xl font-bold ${stat.color} mb-3 group-hover:text-primary transition-colors`}>
                   {stat.value}
                 </div>
-                <p className="text-gray-400 font-medium text-lg">{stat.label}</p>
+                <p className="text-white font-medium text-lg">{stat.label}</p>
               </div>
             ))}
           </div>

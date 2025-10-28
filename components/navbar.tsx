@@ -15,7 +15,7 @@ export default function Navbar() {
             <span className="font-bold text-lg hidden sm:inline">BloodNearMe</span>
           </Link>
 
-          <div className="hidden md:flex items-center gap-8">
+          <div className="hidden md:flex items-center gap-8 text-white">
             <Link href="/" className="hover:text-primary transition font-medium">
               Home
             </Link>
@@ -41,7 +41,7 @@ export default function Navbar() {
         </div>
 
         {isOpen && (
-          <div className="md:hidden pb-4 space-y-2 border-t border-border pt-4">
+          <div className="md:hidden pb-4 space-y-2 border-t border-border pt-4 text-white">
             <Link href="/" className="block py-2 hover:text-primary font-medium">
               Home
             </Link>

@@ -122,7 +122,7 @@ export default function DonorForm() {
       <div className="max-w-2xl mx-auto">
         <div className="text-center mb-12">
           <h2 className="text-4xl md:text-5xl font-bold text-white mb-4">Become a Life Saver</h2>
-          <p className="text-gray-400 text-lg">
+          <p className="text-white text-lg">
             Join our community of blood donors and help save lives across India.
           </p>
         </div>

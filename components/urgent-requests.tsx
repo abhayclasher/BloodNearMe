@@ -87,18 +87,18 @@ export default function UrgentRequests() {
             </div>
             <h2 className="text-4xl font-bold text-white">Urgent Blood Requests</h2>
           </div>
-          <p className="text-gray-400 text-lg">
+          <p className="text-white text-lg">
             Help save lives by responding to these critical blood requests from across India.
           </p>
         </div>
 
         {loading ? (
           <div className="text-center py-8">
-            <p className="text-gray-400">Loading requests...</p>
+            <p className="text-white">Loading requests...</p>
           </div>
         ) : requests.length === 0 ? (
           <div className="text-center py-8">
-            <p className="text-gray-400">No urgent requests at the moment.</p>
+            <p className="text-white">No urgent requests at the moment.</p>
           </div>
         ) : (
           <>
@@ -112,7 +112,7 @@ export default function UrgentRequests() {
                   <div className="flex justify-between items-start mb-4">
                     <div>
                       <h3 className="text-xl font-bold text-white">{request.name}</h3>
-                      <p className="text-gray-400 text-sm">{request.hospital}</p>
+                      <p className="text-white text-sm">{request.hospital}</p>
                     </div>
                     <div
                       className={`${getUrgencyColor(request.urgency)} px-3 py-1 rounded-full text-sm font-semibold flex items-center gap-1`}
@@ -123,13 +123,13 @@ export default function UrgentRequests() {
                   </div>
 
                   <div className="mb-4">
-                    <p className="text-gray-300 text-sm">
+                    <p className="text-white text-sm">
                       Units Needed:{" "}
                       <span className="text-red-500 font-bold text-lg pulse-badge">{request.unitsNeeded}</span>
                     </p>
                   </div>
 
-                  <div className="space-y-2 mb-4 text-gray-400 text-sm">
+                  <div className="space-y-2 mb-4 text-white text-sm">
                     <div className="flex items-center gap-2">
                       <span className="text-lg">📍</span>
                       {request.city}, {request.state}
@@ -140,7 +140,7 @@ export default function UrgentRequests() {
                     </div>
                   </div>
 
-                  <p className="text-gray-300 text-sm mb-6 italic">{request.description}</p>
+                  <p className="text-white text-sm mb-6 italic">{request.description}</p>
 
                   <div className="flex gap-3">
                     <a
