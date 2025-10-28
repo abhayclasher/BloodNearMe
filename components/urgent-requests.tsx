@@ -39,35 +39,69 @@ export default function UrgentRequests() {
     fetchRequests()
   }, [])
 
-  const getUrgencyIcon = (urgency: string) => {
-    switch (urgency) {
+  const getUrgencyLabel = (urgency: string) => {
+    const normalizedUrgency = urgency.toLowerCase();
+    switch (normalizedUrgency) {
       case "critical":
-        return "🚨"
+        return "CRITICAL";
       case "high":
       case "urgent":
-        return "⚠️"
+        return "URGENT";
       case "normal":
+        return "NORMAL";
       case "low":
-        return "✓"
+        return "LOW";
       default:
-        return "•"
+        return urgency.toUpperCase();
     }
-  }
+  };
+
+  const getUrgencyIcon = (urgency: string) => {
+    const normalizedUrgency = urgency.toLowerCase();
+    switch (normalizedUrgency) {
+      case "critical":
+        return "🚨";
+      case "high":
+      case "urgent":
+        return "⚠️";
+      case "normal":
+        return "ℹ️";
+      case "low":
+        return "✓";
+      default:
+        return "🩸";
+    }
+  };
 
   const getUrgencyColor = (urgency: string) => {
-    switch (urgency) {
+    const normalizedUrgency = urgency.toLowerCase();
+    switch (normalizedUrgency) {
       case "critical":
-        return "bg-red-600 text-white"
+        return "bg-red-600 text-white border-red-500";
       case "high":
       case "urgent":
-        return "bg-orange-600 text-white"
+        return "bg-orange-600 text-white border-orange-500";
       case "normal":
+        return "bg-blue-600 text-white border-blue-500";
       case "low":
-        return "bg-green-600 text-white"
+        return "bg-green-600 text-white border-green-500";
       default:
-        return "bg-gray-600"
+        return "bg-gray-600 text-white border-gray-500";
     }
-  }
+  };
+
+  const getCardStyle = (urgency: string) => {
+    const normalizedUrgency = urgency.toLowerCase();
+    switch (normalizedUrgency) {
+      case "critical":
+        return "border-red-600 bg-gradient-to-br from-red-950/30 to-red-900/10 shadow-red-600/20";
+      case "high":
+      case "urgent":
+        return "border-orange-600 bg-gradient-to-br from-orange-950/30 to-orange-900/10 shadow-orange-600/20";
+      default:
+        return "border-gray-700 bg-card";
+    }
+  };
 
   const getTimeAgo = (date: Date) => {
     const seconds = Math.floor((new Date().getTime() - date.getTime()) / 1000)
@@ -103,55 +137,89 @@ export default function UrgentRequests() {
         ) : (
           <>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-              {requests.map((request, index) => (
-                <div
-                  key={request.id}
-                  className="bg-card border border-l-4 border-gray-700 border-l-red-600 rounded-lg p-6 hover:border-gray-600 transition-all duration-300 slide-card glow-card"
-                  style={{ animationDelay: `${index * 100}ms` }}
-                >
-                  <div className="flex justify-between items-start mb-4">
-                    <div>
-                      <h3 className="text-xl font-bold text-white">{request.name}</h3>
-                      <p className="text-white text-sm">{request.hospital}</p>
-                    </div>
-                    <div
-                      className={`${getUrgencyColor(request.urgency)} px-3 py-1 rounded-full text-sm font-semibold flex items-center gap-1`}
-                    >
-                      <span>{getUrgencyIcon(request.urgency)}</span>
-                      {request.bloodGroup}
-                    </div>
-                  </div>
+              {requests.map((request, index) => {
+                const normalizedUrgency = request.urgency.toLowerCase();
+                const isCritical = normalizedUrgency === "critical";
+                const isUrgent = normalizedUrgency === "high" || normalizedUrgency === "urgent";
+                
+                return (
+                  <div
+                    key={request.id}
+                    className={`relative overflow-hidden rounded-lg border-2 ${getCardStyle(request.urgency)} p-4 hover:shadow-2xl transition-all duration-300 slide-card ${isCritical ? 'animate-pulse-border' : ''}`}
+                    style={{ animationDelay: `${index * 100}ms` }}
+                  >
+                    {/* Emergency Stripe for Critical/Urgent */}
+                    {(isCritical || isUrgent) && (
+                      <div className={`absolute top-0 left-0 right-0 h-1 ${isCritical ? 'bg-gradient-to-r from-red-600 via-red-400 to-red-600 animate-pulse' : 'bg-gradient-to-r from-orange-600 via-orange-400 to-orange-600'}`}></div>
+                    )}
 
-                  <div className="mb-4">
-                    <p className="text-white text-sm">
-                      Units Needed:{" "}
-                      <span className="text-red-500 font-bold text-lg pulse-badge">{request.unitsNeeded}</span>
-                    </p>
-                  </div>
+                    {/* Urgency Banner */}
+                    <div className="flex justify-between items-start mb-3 gap-3">
+                      <div className="flex-1">
+                        <div className="flex items-center gap-2 mb-1.5">
+                          <span className={`px-2 py-1 rounded text-xs font-bold border-2 ${getUrgencyColor(request.urgency)} uppercase tracking-wider flex items-center gap-1 ${isCritical ? 'animate-pulse' : ''}`}>
+                            <span className="text-sm">{getUrgencyIcon(request.urgency)}</span>
+                            <span className="text-xs">{getUrgencyLabel(request.urgency)}</span>
+                          </span>
+                        </div>
+                        <h3 className="text-lg font-bold text-white">{request.name}</h3>
+                        <p className="text-white text-xs flex items-center gap-1 mt-0.5">
+                          <span>🏥</span> {request.hospital}
+                        </p>
+                      </div>
 
-                  <div className="space-y-2 mb-4 text-white text-sm">
-                    <div className="flex items-center gap-2">
-                      <span className="text-lg">📍</span>
-                      {request.city}, {request.state}
+                      {/* Blood Group Badge - More Prominent */}
+                      <div className="flex flex-col items-center justify-center bg-gradient-to-br from-red-600 to-red-700 text-white rounded-lg p-3 min-w-[65px] shadow-xl border-2 border-red-400">
+                        <div className="text-3xl font-black leading-none drop-shadow-lg">{request.bloodGroup}</div>
+                        <div className="text-xs mt-1 font-bold opacity-90 tracking-wide">NEEDED</div>
+                      </div>
                     </div>
-                    <div className="flex items-center gap-2">
-                      <span className="text-lg">⏱️</span>
-                      {mounted ? getTimeAgo(request.createdAt) : 'Loading...'}
+
+                    {/* Units Needed - Highlighted */}
+                    <div className="mb-3 bg-black/30 rounded p-2 border-l-4 border-red-500">
+                      <div className="flex items-center justify-between">
+                        <span className="text-white text-xs font-semibold">Units Required:</span>
+                        <div className="flex items-center gap-1.5">
+                          <span className="text-red-500 font-black text-xl animate-pulse">{request.unitsNeeded}</span>
+                          <span className="text-white text-xs">unit{request.unitsNeeded > 1 ? 's' : ''}</span>
+                        </div>
+                      </div>
                     </div>
-                  </div>
 
-                  <p className="text-white text-sm mb-6 italic">{request.description}</p>
+                    {/* Location & Time */}
+                    <div className="space-y-1.5 mb-3 text-white text-xs">
+                      <div className="flex items-center gap-2 bg-black/20 rounded p-1.5">
+                        <span>📍</span>
+                        <span className="font-medium">{request.city}, {request.state}</span>
+                      </div>
+                      <div className="flex items-center gap-2 bg-black/20 rounded p-1.5">
+                        <span>⏱️</span>
+                        <span>{mounted ? getTimeAgo(request.createdAt) : 'Loading...'}</span>
+                      </div>
+                    </div>
 
-                  <div className="flex gap-3">
+                    {/* Description */}
+                    {request.description && (
+                      <p className="text-white/90 text-xs mb-3 italic bg-black/20 rounded p-2">
+                        "{request.description}"
+                      </p>
+                    )}
+
+                    {/* Call Button */}
                     <a
                       href={`tel:${request.phone}`}
-                      className="flex-1 bg-red-600 hover:bg-red-700 text-white font-semibold py-2 px-4 rounded-lg transition-all duration-200 transform hover:scale-105 text-center"
+                      className={`flex items-center justify-center gap-2 w-full font-bold py-2.5 px-4 rounded-lg transition-all duration-200 transform hover:scale-105 text-center shadow-lg text-sm ${
+                        isCritical 
+                          ? 'bg-red-600 hover:bg-red-700 text-white animate-pulse' 
+                          : 'bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 text-white'
+                      }`}
                     >
-                      📞 Call: {request.phone}
+                      <span>📞</span>
+                      <span>CALL NOW: {request.phone}</span>
                     </a>
                   </div>
-                </div>
-              ))}
+                );
+              })}
             </div>
 
             <div className="text-center">

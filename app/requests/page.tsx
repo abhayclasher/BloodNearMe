@@ -99,22 +99,72 @@ export default function RequestsPage() {
     return () => window.removeEventListener("scroll", handleScroll)
   }, [loadMoreRequests])
 
-  const getUrgencyColor = (urgency: string) => {
-    switch (urgency) {
+  const getUrgencyLabel = (urgency: string) => {
+    const normalizedUrgency = urgency.toLowerCase();
+    switch (normalizedUrgency) {
       case "critical":
-      case "urgent":
-        return "bg-red-600 text-white"
+        return "CRITICAL";
       case "high":
-        return "bg-orange-600 text-white"
+      case "urgent":
+        return "URGENT";
+      case "normal":
+      case "medium":
+        return "NORMAL";
+      case "low":
+        return "LOW";
+      default:
+        return urgency.toUpperCase();
+    }
+  };
+
+  const getUrgencyIcon = (urgency: string) => {
+    const normalizedUrgency = urgency.toLowerCase();
+    switch (normalizedUrgency) {
+      case "critical":
+        return "🚨";
+      case "high":
+      case "urgent":
+        return "⚠️";
+      case "normal":
+      case "medium":
+        return "ℹ️";
+      case "low":
+        return "✓";
+      default:
+        return "🩸";
+    }
+  };
+
+  const getUrgencyColor = (urgency: string) => {
+    const normalizedUrgency = urgency.toLowerCase();
+    switch (normalizedUrgency) {
+      case "critical":
+        return "bg-red-600 text-white border-red-500";
+      case "high":
+      case "urgent":
+        return "bg-orange-600 text-white border-orange-500";
       case "medium":
       case "normal":
-        return "bg-yellow-600 text-white"
+        return "bg-blue-600 text-white border-blue-500";
       case "low":
-        return "bg-green-600 text-white"
+        return "bg-green-600 text-white border-green-500";
       default:
-        return "bg-gray-600"
+        return "bg-gray-600 text-white border-gray-500";
     }
-  }
+  };
+
+  const getCardStyle = (urgency: string) => {
+    const normalizedUrgency = urgency.toLowerCase();
+    switch (normalizedUrgency) {
+      case "critical":
+        return "border-red-600 bg-gradient-to-br from-red-950/30 to-red-900/10 shadow-red-600/20";
+      case "high":
+      case "urgent":
+        return "border-orange-600 bg-gradient-to-br from-orange-950/30 to-orange-900/10 shadow-orange-600/20";
+      default:
+        return "border-gray-700 bg-card";
+    }
+  };
 
   const getTimeAgo = (date: Date) => {
     const seconds = Math.floor((new Date().getTime() - date.getTime()) / 1000)
@@ -144,7 +194,8 @@ export default function RequestsPage() {
         }
       `}</style>
 
-      <h1 className="text-4xl font-bold mb-8">All Blood Requests</h1>
+      <h1 className="text-4xl font-bold mb-2 text-white">All Blood Requests</h1>
+      <p className="text-white mb-8">Browse and respond to blood donation requests from across India</p>
 
       <div className="flex gap-4 mb-8">
         {(["all", "open", "fulfilled"] as const).map((status) => (
@@ -176,61 +227,94 @@ export default function RequestsPage() {
       ) : filteredRequests.length > 0 ? (
         <>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {filteredRequests.map((request, index) => (
-              <div
-                key={request.id}
-                className="bg-card border border-l-4 border-gray-700 border-l-red-600 rounded-lg p-6 hover:border-gray-600 transition-all duration-300 fade-in"
-                style={{ animationDelay: `${index * 50}ms` }}
-              >
-                <div className="flex justify-between items-start mb-4">
-                  <div>
-                    <h3 className="text-xl font-bold text-white">{request.name}</h3>
-                    <p className="text-gray-400 text-sm">{request.hospital}</p>
-                  </div>
-                  <div className={`${getUrgencyColor(request.urgency)} px-3 py-1 rounded-full text-sm font-semibold`}>
-                    {request.bloodGroup}
-                  </div>
-                </div>
-
-                <div className="mb-4">
-                  <p className="text-gray-300 text-sm">
-                    Units Needed: <span className="text-red-500 font-bold text-lg">{request.unitsNeeded}</span>
-                  </p>
-                </div>
-
-                <div className="space-y-2 mb-4 text-gray-400 text-sm">
-                  <div className="flex items-center gap-2">
-                    <svg className="w-4 h-4 text-red-600" fill="currentColor" viewBox="0 0 20 20">
-                      <path
-                        fillRule="evenodd"
-                        d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z"
-                        clipRule="evenodd"
-                      />
-                    </svg>
-                    {request.city}, {request.state}
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <svg className="w-4 h-4 text-red-600" fill="currentColor" viewBox="0 0 20 20">
-                      <path
-                        fillRule="evenodd"
-                        d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-11a1 1 0 11-2 0 1 1 0 012 0zm-1 4a1 1 0 100-2 1 1 0 000 2z"
-                        clipRule="evenodd"
-                      />
-                    </svg>
-                    {getTimeAgo(request.createdAt)}
-                  </div>
-                </div>
-
-                <p className="text-gray-300 text-sm mb-6 italic">{request.description}</p>
-
-                <a
-                  href={`tel:${request.phone}`}
-                  className="w-full bg-primary hover:bg-primary-light text-white font-semibold py-2 px-4 rounded-lg transition text-center block"
+            {filteredRequests.map((request, index) => {
+              const normalizedUrgency = request.urgency.toLowerCase();
+              const isCritical = normalizedUrgency === "critical";
+              const isUrgent = normalizedUrgency === "high" || normalizedUrgency === "urgent";
+              
+              return (
+                <div
+                  key={request.id}
+                  className={`relative overflow-hidden rounded-lg border-2 ${getCardStyle(request.urgency)} p-4 hover:shadow-2xl transition-all duration-300 fade-in ${isCritical ? 'animate-pulse-border' : ''}`}
+                  style={{ animationDelay: `${index * 50}ms` }}
                 >
-                  Call: {request.phone}
-                </a>
-              </div>
-            ))}
+                  {/* Emergency Stripe for Critical/Urgent */}
+                  {(isCritical || isUrgent) && (
+                    <div className={`absolute top-0 left-0 right-0 h-1 ${isCritical ? 'bg-gradient-to-r from-red-600 via-red-400 to-red-600 animate-pulse' : 'bg-gradient-to-r from-orange-600 via-orange-400 to-orange-600'}`}></div>
+                  )}
+
+                  {/* Urgency Banner */}
+                  <div className="flex justify-between items-start mb-3 gap-3">
+                    <div className="flex-1">
+                      <div className="flex items-center gap-2 mb-1.5 flex-wrap">
+                        <span className={`px-2 py-1 rounded text-xs font-bold border-2 ${getUrgencyColor(request.urgency)} uppercase tracking-wider flex items-center gap-1 ${isCritical ? 'animate-pulse' : ''}`}>
+                          <span className="text-sm">{getUrgencyIcon(request.urgency)}</span>
+                          <span className="text-xs">{getUrgencyLabel(request.urgency)}</span>
+                        </span>
+                        {request.status === 'fulfilled' && (
+                          <span className="px-2 py-1 rounded text-xs font-bold bg-green-600 text-white border-2 border-green-500 uppercase tracking-wider">
+                            ✓ DONE
+                          </span>
+                        )}
+                      </div>
+                      <h3 className="text-lg font-bold text-white">{request.name}</h3>
+                      <p className="text-white text-xs flex items-center gap-1 mt-0.5">
+                        <span>🏥</span> {request.hospital}
+                      </p>
+                    </div>
+
+                    {/* Blood Group Badge - More Prominent */}
+                    <div className="flex flex-col items-center justify-center bg-gradient-to-br from-red-600 to-red-700 text-white rounded-lg p-3 min-w-[65px] shadow-xl border-2 border-red-400">
+                      <div className="text-3xl font-black leading-none drop-shadow-lg">{request.bloodGroup}</div>
+                      <div className="text-xs mt-1 font-bold opacity-90 tracking-wide">NEEDED</div>
+                    </div>
+                  </div>
+
+                  {/* Units Needed - Highlighted */}
+                  <div className="mb-3 bg-black/30 rounded p-2 border-l-4 border-red-500">
+                    <div className="flex items-center justify-between">
+                      <span className="text-white text-xs font-semibold">Units Required:</span>
+                      <div className="flex items-center gap-1.5">
+                        <span className="text-red-500 font-black text-xl animate-pulse">{request.unitsNeeded}</span>
+                        <span className="text-white text-xs">unit{request.unitsNeeded > 1 ? 's' : ''}</span>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Location & Time */}
+                  <div className="space-y-1.5 mb-3 text-white text-xs">
+                    <div className="flex items-center gap-2 bg-black/20 rounded p-1.5">
+                      <span>📍</span>
+                      <span className="font-medium">{request.city}, {request.state}</span>
+                    </div>
+                    <div className="flex items-center gap-2 bg-black/20 rounded p-1.5">
+                      <span>⏱️</span>
+                      <span>{getTimeAgo(request.createdAt)}</span>
+                    </div>
+                  </div>
+
+                  {/* Description */}
+                  {request.description && (
+                    <p className="text-white/90 text-xs mb-3 italic bg-black/20 rounded p-2">
+                      "{request.description}"
+                    </p>
+                  )}
+
+                  {/* Call Button */}
+                  <a
+                    href={`tel:${request.phone}`}
+                    className={`flex items-center justify-center gap-2 w-full font-bold py-2.5 px-4 rounded-lg transition-all duration-200 transform hover:scale-105 text-center shadow-lg text-sm ${
+                      isCritical 
+                        ? 'bg-red-600 hover:bg-red-700 text-white animate-pulse' 
+                        : 'bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 text-white'
+                    }`}
+                  >
+                    <span>📞</span>
+                    <span>CALL NOW: {request.phone}</span>
+                  </a>
+                </div>
+              );
+            })}
           </div>
 
           {loadingMore && (

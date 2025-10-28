@@ -254,6 +254,17 @@ textarea:focus {
   }
 }
 
+@keyframes pulseBorder {
+  0%, 100% {
+    border-color: rgba(220, 38, 38, 0.5);
+    box-shadow: 0 0 20px rgba(220, 38, 38, 0.3);
+  }
+  50% {
+    border-color: rgba(220, 38, 38, 1);
+    box-shadow: 0 0 40px rgba(220, 38, 38, 0.6);
+  }
+}
+
 .pulse-badge {
   animation: pulseUrgent 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
 }
@@ -264,6 +275,10 @@ textarea:focus {
 
 .glow-card {
   animation: glowRedBorder 2s ease-in-out infinite;
+}
+
+.animate-pulse-border {
+  animation: pulseBorder 2s ease-in-out infinite;
 }
 
 /* Homepage Enhancement Animations */
