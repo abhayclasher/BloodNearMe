@@ -1,7 +1,7 @@
 "use client"
 
 import { useState, useEffect, useCallback } from "react"
-import { db } from "@/lib/firebase"
+import { getDbClient } from "@/lib/firebase"
 import { collection, query, orderBy, getDocs, limit, startAfter, type QueryConstraint } from "firebase/firestore"
 import type { BloodRequest } from "@/lib/types"
 
@@ -18,6 +18,11 @@ export default function RequestsPage() {
   const fetchInitialRequests = useCallback(async () => {
     try {
       setLoading(true)
+      const db = getDbClient()
+      if (!db) {
+        setLoading(false)
+        return
+      }
       const constraints: QueryConstraint[] = [orderBy("createdAt", "desc"), limit(REQUESTS_PER_PAGE)]
       const q = query(collection(db, "bloodRequests"), ...constraints)
       const querySnapshot = await getDocs(q)
@@ -53,8 +58,10 @@ export default function RequestsPage() {
         startAfter(lastDoc),
         limit(REQUESTS_PER_PAGE),
       ]
-      const q = query(collection(db, "bloodRequests"), ...constraints)
-      const querySnapshot = await getDocs(q)
+        const db = getDbClient()
+        if (!db) return
+        const q = query(collection(db, "bloodRequests"), ...constraints)
+        const querySnapshot = await getDocs(q)
 
       const newRequests: BloodRequest[] = []
       querySnapshot.forEach((doc) => {

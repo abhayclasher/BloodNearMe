@@ -1,5 +1,5 @@
 "use client";
-
-export default function AdminLayout({ children }: { children: React.ReactNode }) {
-  return <>{children}</>;
+import AdminClient from "./page";
+export default function AdminPage() {
+  return <AdminClient />;
 }

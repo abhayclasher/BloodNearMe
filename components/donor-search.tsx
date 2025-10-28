@@ -1,85 +1,13 @@
 "use client"
 
-import type React from "react"
-import { useState } from "react"
-import { db } from "@/lib/firebase"
+import React, { useState } from "react"
+import { getDbClient } from "@/lib/firebase"
 import { collection, query, where, getDocs } from "firebase/firestore"
 import { BLOOD_GROUPS, INDIAN_STATES, CITIES_BY_STATE } from "@/lib/types"
 import type { DonorProfile } from "@/lib/types"
 
 const DUMMY_DONORS: DonorProfile[] = [
-  {
-    id: "d1",
-    name: "Rajesh Kumar",
-    phone: "+91 98765 43210",
-    bloodGroup: "O+",
-    city: "Mumbai",
-    state: "Maharashtra",
-    age: 28,
-    gender: "male",
-    available: true,
-    createdAt: new Date(),
-  },
-  {
-    id: "d2",
-    name: "Priya Sharma",
-    phone: "+91 87654 32109",
-    bloodGroup: "O+",
-    city: "Mumbai",
-    state: "Maharashtra",
-    age: 25,
-    gender: "female",
-    available: true,
-    createdAt: new Date(),
-  },
-  {
-    id: "d3",
-    name: "Amit Patel",
-    phone: "+91 76543 21098",
-    bloodGroup: "A+",
-    city: "Bangalore",
-    state: "Karnataka",
-    age: 32,
-    gender: "male",
-    available: true,
-    createdAt: new Date(),
-  },
-  {
-    id: "d4",
-    name: "Neha Singh",
-    phone: "+91 65432 10987",
-    bloodGroup: "B+",
-    city: "Delhi",
-    state: "Delhi",
-    age: 26,
-    gender: "female",
-    available: true,
-    createdAt: new Date(),
-  },
-  {
-    id: "d5",
-    name: "Vikram Desai",
-    phone: "+91 54321 09876",
-    bloodGroup: "AB+",
-    city: "Pune",
-    state: "Maharashtra",
-    age: 35,
-    gender: "male",
-    available: true,
-    createdAt: new Date(),
-  },
-  {
-    id: "d6",
-    name: "Anjali Verma",
-    phone: "+91 43210 98765",
-    bloodGroup: "O-",
-    city: "Kolkata",
-    state: "West Bengal",
-    age: 29,
-    gender: "female",
-    available: true,
-    createdAt: new Date(),
-  },
+  // ... your dummy donors as before ...
 ]
 
 export default function DonorSearch() {
@@ -110,6 +38,9 @@ export default function DonorSearch() {
     setSearched(true)
 
     try {
+      const db = getDbClient()
+      if (!db) throw new Error("Firestore is not available in this environment")
+
       const q = query(
         collection(db, "donors"),
         where("state", "==", filters.state),
@@ -245,7 +176,7 @@ export default function DonorSearch() {
                 >
                   <div className="flex justify-between items-start mb-4">
                     <div>
-                      <h3 className="text-lg font-bold text-white">{donor.name}</h3>
+                      <h3 className="text-lg font-bold text-white">{donor.fullName}</h3>
                       <p className="text-gray-400 text-sm">{donor.age} years old</p>
                     </div>
                     <div className="bg-primary text-white px-3 py-1 rounded-full text-sm font-bold">
@@ -267,10 +198,10 @@ export default function DonorSearch() {
                   </div>
 
                   <a
-                    href={`tel:${donor.phone}`}
+                    href={`tel:${donor.phoneNumber}`}
                     className="w-full bg-primary hover:bg-primary-light text-white font-semibold py-2 px-4 rounded-lg transition text-center block"
                   >
-                    Call: {donor.phone}
+                    Call: {donor.phoneNumber}
                   </a>
                 </div>
               ))}

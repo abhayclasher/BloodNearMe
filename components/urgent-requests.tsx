@@ -2,7 +2,7 @@
 import Link from "next/link"
 import { useEffect, useState } from "react"
 import { collection, query, orderBy, limit, getDocs } from "firebase/firestore"
-import { db } from "@/lib/firebase"
+import { getDbClient } from "@/lib/firebase"
 import type { BloodRequest } from "@/lib/types"
 
 export default function UrgentRequests() {
@@ -14,6 +14,11 @@ export default function UrgentRequests() {
     setMounted(true)
     const fetchRequests = async () => {
       try {
+        const db = getDbClient()
+        if (!db) {
+          setLoading(false)
+          return
+        }
         const q = query(collection(db, "bloodRequests"), orderBy("createdAt", "desc"), limit(10))
         const snapshot = await getDocs(q)
         const allData = snapshot.docs.map((doc) => ({

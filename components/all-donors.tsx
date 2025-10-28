@@ -1,7 +1,7 @@
 "use client"
 
 import React, { useState, useEffect } from "react"
-import { db } from "@/lib/firebase"
+import { getDbClient } from "@/lib/firebase"
 import { collection, getDocs, query, where, orderBy } from "firebase/firestore"
 import type { DonorProfile } from "@/lib/types"
 import { BLOOD_GROUPS, INDIAN_STATES, CITIES_BY_STATE } from "@/lib/types"
@@ -23,6 +23,11 @@ export default function AllDonors() {
     const fetchActiveDonors = async () => {
       try {
         // First try to get all donors, then filter for available ones
+        const db = getDbClient()
+        if (!db) {
+          setActiveLoading(false)
+          return
+        }
         const snapshot = await getDocs(collection(db, "donors"))
         const allDonors = snapshot.docs.map((doc) => ({
           ...doc.data(),
@@ -56,6 +61,8 @@ export default function AllDonors() {
     setSearched(true)
 
     try {
+      const db = getDbClient()
+      if (!db) return
       const q = query(
         collection(db, "donors"),
         where("state", "==", filters.state),

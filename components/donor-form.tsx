@@ -2,7 +2,7 @@
 
 import type React from "react"
 import { useState } from "react"
-import { db } from "@/lib/firebase"
+import { getDbClient } from "@/lib/firebase"
 import { collection, addDoc, serverTimestamp } from "firebase/firestore"
 import { INDIAN_STATES, CITIES_BY_STATE, BLOOD_GROUPS } from "@/lib/types"
 
@@ -56,6 +56,9 @@ export default function DonorForm() {
     setDonorLoading(true)
 
     try {
+      const db = getDbClient()
+      if (!db) throw new Error("Firestore is not available in this environment")
+
       await addDoc(collection(db, "donors"), {
         ...donorForm,
         age: Number.parseInt(donorForm.age),

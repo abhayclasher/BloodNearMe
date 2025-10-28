@@ -26,7 +26,6 @@ export default function MapPage() {
     }))
   }
 
-  // Loading state removed since we removed authentication
 
   return (
     <div className="max-w-6xl mx-auto px-4 py-12">
@@ -91,7 +90,5 @@ export default function MapPage() {
     </div>
   )
 }
-function useAuth(): { user: any; loading: any } {
-  throw new Error("Function not implemented.")
-}
+
 
