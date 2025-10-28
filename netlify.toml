@@ -1,5 +1,8 @@
 [build]
-  command = "pnpm -w build"
+  # Use plain pnpm build so Netlify runs the root package script reliably.
+  # If your Netlify environment still treats this as a workspace you can
+  # switch to: pnpm --filter . build
+  command = "pnpm build"
   publish = "."
 
 [context.production.environment]
