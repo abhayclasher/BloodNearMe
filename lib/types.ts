@@ -20,9 +20,10 @@ export interface BloodRequest {
   city: string
   state: string
   hospital: string
-  urgency: "low" | "medium" | "high" | "critical"
+  urgency: "normal" | "urgent" | "critical"
   unitsNeeded: number
   description: string
+  reason?: string
   createdAt: Date
   status: "open" | "fulfilled"
 }
@@ -44,6 +45,19 @@ export interface DonorProfile {
 }
 
 export const BLOOD_GROUPS = ["O+", "O-", "A+", "A-", "B+", "B-", "AB+", "AB-"]
+
+export const BLOOD_REQUEST_REASONS = [
+  "Surgery/Operation",
+  "Accident/Trauma",
+  "Cancer Treatment",
+  "Chronic Disease",
+  "Anemia",
+  "Pregnancy Complications",
+  "Organ Transplant",
+  "Blood Disorder",
+  "Emergency Medical Condition",
+  "Other",
+]
 
 export const INDIAN_STATES = [
   "Andhra Pradesh",

@@ -153,49 +153,85 @@ export default function AllDonors() {
               {activeDonors.map((donor, index) => (
                 <div
                   key={donor.id}
-                  className="relative overflow-hidden rounded-lg border-2 border-blue-600/30 bg-gradient-to-br from-blue-950/30 to-blue-900/10 p-4 hover:shadow-2xl hover:border-blue-600 transition-all duration-300"
+                  className="group relative overflow-hidden rounded-2xl border-2 backdrop-blur-sm transition-all duration-500 hover:scale-[1.02] bg-gradient-to-br from-blue-950/40 via-blue-900/30 to-blue-950/40 border-blue-500/50 shadow-xl shadow-blue-900/30 hover:shadow-blue-600/40"
                   style={{ animationDelay: `${index * 100}ms` }}
                 >
-                  {/* Top Stripe */}
-                  <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-blue-600 via-blue-400 to-blue-600"></div>
+                  {/* Animated Background Gradient */}
+                  <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent opacity-0 group-hover:opacity-100 group-hover:translate-x-full transition-all duration-1000 ease-out"></div>
 
-                  <div className="flex justify-between items-start mb-3 gap-3">
-                    <div className="flex-1">
-                      <div className="flex items-center gap-2 mb-1.5">
-                        <span className="px-2 py-1 rounded text-xs font-bold border-2 border-green-500 bg-green-600 text-white uppercase tracking-wider flex items-center gap-1">
-                          <span className="w-2 h-2 bg-white rounded-full animate-pulse"></span>
-                          <span className="text-xs">AVAILABLE</span>
-                        </span>
+                  {/* Top Border Animation */}
+                  <div className="absolute top-0 left-0 right-0 h-1 overflow-hidden">
+                    <div className="h-full w-full bg-gradient-to-r from-blue-600 via-blue-400 to-blue-600"></div>
+                  </div>
+
+                  <div className="relative p-5">
+                    {/* Header Section */}
+                    <div className="flex justify-between items-start mb-4 gap-4">
+                      <div className="flex-1 min-w-0">
+                        {/* Availability Badge */}
+                        <div className="flex items-center gap-2 mb-2 flex-wrap">
+                          <span className="px-3 py-1.5 rounded-full text-xs font-bold border-2 uppercase tracking-wider flex items-center gap-1.5 shadow-lg bg-green-600 border-green-400 text-white">
+                            <div className="w-2 h-2 rounded-full bg-white animate-pulse shadow-lg shadow-white/50"></div>
+                            <span>AVAILABLE</span>
+                          </span>
+                        </div>
+                        
+                        {/* Donor Name */}
+                        <h3 className="text-xl font-bold text-white mb-1.5 truncate">{donor.fullName || donor.name}</h3>
+                        
+                        {/* Age & Gender */}
+                        <div className="flex items-center gap-2 text-gray-400 text-xs mb-2">
+                          <span className="font-medium capitalize">{donor.age} yrs • {donor.gender}</span>
+                        </div>
+
+                        {/* Location */}
+                        <div className="flex items-center gap-2 text-gray-400 text-xs">
+                          <span>📍</span>
+                          <span className="font-medium">{donor.city}, {donor.state}</span>
+                        </div>
                       </div>
-                      <h3 className="text-lg font-bold text-white">{donor.fullName || donor.name}</h3>
-                      <p className="text-white text-xs flex items-center gap-1 mt-0.5">
-                        <span>{donor.age} yrs</span> • <span>{donor.gender}</span>
-                      </p>
+
+                      {/* Blood Group Badge - Enhanced 3D Design */}
+                      <div className="relative flex-shrink-0">
+                        <div className="absolute inset-0 bg-blue-500 rounded-xl blur-xl opacity-60 group-hover:opacity-80 transition-opacity"></div>
+                        <div className="relative bg-gradient-to-br from-blue-600 via-blue-700 to-blue-800 text-white rounded-xl p-4 min-w-[80px] shadow-2xl border-2 border-blue-400/50 transform group-hover:scale-110 transition-transform duration-300">
+                          <div className="text-center">
+                            <div className="text-4xl font-black leading-none drop-shadow-2xl mb-1">{donor.bloodGroup}</div>
+                            <div className="text-[10px] font-bold opacity-90 tracking-widest uppercase">Donor</div>
+                          </div>
+                        </div>
+                      </div>
                     </div>
 
-                    {/* Blood Group Badge */}
-                    <div className="flex flex-col items-center justify-center bg-gradient-to-br from-blue-600 to-blue-700 text-white rounded-lg p-3 min-w-[65px] shadow-xl border-2 border-blue-400">
-                      <div className="text-3xl font-black leading-none drop-shadow-lg">{donor.bloodGroup}</div>
-                      <div className="text-xs mt-1 font-bold opacity-90 tracking-wide">DONOR</div>
+                    {/* Info Grid */}
+                    <div className="grid grid-cols-2 gap-3 mb-4">
+                      {/* Age */}
+                      <div className="bg-gradient-to-br from-black/40 to-black/20 rounded-xl p-3 border border-blue-500/30 backdrop-blur-sm">
+                        <div className="text-gray-400 text-[10px] font-semibold uppercase tracking-wider mb-1">Age</div>
+                        <div className="text-blue-400 font-black text-3xl leading-none">{donor.age}</div>
+                      </div>
+
+                      {/* Gender */}
+                      <div className="bg-gradient-to-br from-black/40 to-black/20 rounded-xl p-3 border border-blue-500/30 backdrop-blur-sm">
+                        <div className="text-gray-400 text-[10px] font-semibold uppercase tracking-wider mb-1">Gender</div>
+                        <div className="flex items-center gap-1.5">
+                          <span className="text-blue-400 text-base">{donor.gender === 'male' ? '♂️' : donor.gender === 'female' ? '♀️' : '⚧'}</span>
+                          <span className="text-blue-400 text-sm font-bold capitalize">{donor.gender}</span>
+                        </div>
+                      </div>
                     </div>
+
+                    {/* Call to Action Button */}
+                    <a
+                      href={`tel:${donor.phoneNumber || donor.phone}`}
+                      className="group/btn relative overflow-hidden flex items-center justify-center gap-3 w-full font-bold py-4 px-6 rounded-xl transition-all duration-300 transform hover:scale-[1.02] active:scale-[0.98] text-center shadow-2xl bg-gradient-to-r from-blue-600 via-blue-700 to-blue-800 hover:from-blue-500 hover:via-blue-600 hover:to-blue-700 text-white shadow-blue-900/50"
+                    >
+                      <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent opacity-0 group-hover/btn:opacity-100 group-hover/btn:translate-x-full transition-all duration-700 ease-out"></div>
+                      <span className="relative text-xl">📞</span>
+                      <span className="relative text-sm tracking-wide">CALL NOW</span>
+                      <span className="relative text-sm font-mono">{donor.phoneNumber || donor.phone}</span>
+                    </a>
                   </div>
-
-                  {/* Location */}
-                  <div className="mb-3 bg-black/30 rounded p-2 border-l-4 border-blue-500">
-                    <div className="flex items-center gap-2 text-white text-xs">
-                      <span>📍</span>
-                      <span className="font-medium">{donor.city}, {donor.state}</span>
-                    </div>
-                  </div>
-
-                  {/* Call Button */}
-                  <a
-                    href={`tel:${donor.phoneNumber || donor.phone}`}
-                    className="flex items-center justify-center gap-2 w-full font-bold py-2.5 px-4 rounded-lg transition-all duration-200 transform hover:scale-105 text-center shadow-lg text-sm bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white"
-                  >
-                    <span>📞</span>
-                    <span>CALL NOW: {donor.phoneNumber || donor.phone}</span>
-                  </a>
                 </div>
               ))}
             </div>
@@ -218,51 +254,87 @@ export default function AllDonors() {
                 {donors.map((donor, index) => (
                   <div
                     key={donor.id}
-                    className="relative overflow-hidden rounded-lg border-2 border-blue-600/30 bg-gradient-to-br from-blue-950/30 to-blue-900/10 p-4 hover:shadow-2xl hover:border-blue-600 transition-all duration-300"
+                    className="group relative overflow-hidden rounded-2xl border-2 backdrop-blur-sm transition-all duration-500 hover:scale-[1.02] bg-gradient-to-br from-blue-950/40 via-blue-900/30 to-blue-950/40 border-blue-500/50 shadow-xl shadow-blue-900/30 hover:shadow-blue-600/40"
                     style={{ animationDelay: `${index * 100}ms` }}
                   >
-                    {/* Top Stripe */}
-                    <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-blue-600 via-blue-400 to-blue-600"></div>
+                    {/* Animated Background Gradient */}
+                    <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent opacity-0 group-hover:opacity-100 group-hover:translate-x-full transition-all duration-1000 ease-out"></div>
 
-                    <div className="flex justify-between items-start mb-3 gap-3">
-                      <div className="flex-1">
-                        <div className="flex items-center gap-2 mb-1.5">
+                    {/* Top Border Animation */}
+                    <div className="absolute top-0 left-0 right-0 h-1 overflow-hidden">
+                      <div className="h-full w-full bg-gradient-to-r from-blue-600 via-blue-400 to-blue-600"></div>
+                    </div>
+
+                    <div className="relative p-5">
+                      {/* Header Section */}
+                      <div className="flex justify-between items-start mb-4 gap-4">
+                        <div className="flex-1 min-w-0">
+                          {/* Availability Badge */}
                           {donor.available && (
-                            <span className="px-2 py-1 rounded text-xs font-bold border-2 border-green-500 bg-green-600 text-white uppercase tracking-wider flex items-center gap-1">
-                              <span className="w-2 h-2 bg-white rounded-full animate-pulse"></span>
-                              <span className="text-xs">AVAILABLE</span>
-                            </span>
+                            <div className="flex items-center gap-2 mb-2 flex-wrap">
+                              <span className="px-3 py-1.5 rounded-full text-xs font-bold border-2 uppercase tracking-wider flex items-center gap-1.5 shadow-lg bg-green-600 border-green-400 text-white">
+                                <div className="w-2 h-2 rounded-full bg-white animate-pulse shadow-lg shadow-white/50"></div>
+                                <span>AVAILABLE</span>
+                              </span>
+                            </div>
                           )}
+                          
+                          {/* Donor Name */}
+                          <h3 className="text-xl font-bold text-white mb-1.5 truncate">{donor.fullName || donor.name}</h3>
+                          
+                          {/* Age & Gender */}
+                          <div className="flex items-center gap-2 text-gray-400 text-xs mb-2">
+                            <span className="font-medium capitalize">{donor.age} yrs • {donor.gender}</span>
+                          </div>
+
+                          {/* Location */}
+                          <div className="flex items-center gap-2 text-gray-400 text-xs">
+                            <span>📍</span>
+                            <span className="font-medium">{donor.city}, {donor.state}</span>
+                          </div>
                         </div>
-                        <h3 className="text-lg font-bold text-white">{donor.fullName || donor.name}</h3>
-                        <p className="text-white text-xs flex items-center gap-1 mt-0.5">
-                          <span>{donor.age} yrs</span> • <span>{donor.gender}</span>
-                        </p>
+
+                        {/* Blood Group Badge - Enhanced 3D Design */}
+                        <div className="relative flex-shrink-0">
+                          <div className="absolute inset-0 bg-blue-500 rounded-xl blur-xl opacity-60 group-hover:opacity-80 transition-opacity"></div>
+                          <div className="relative bg-gradient-to-br from-blue-600 via-blue-700 to-blue-800 text-white rounded-xl p-4 min-w-[80px] shadow-2xl border-2 border-blue-400/50 transform group-hover:scale-110 transition-transform duration-300">
+                            <div className="text-center">
+                              <div className="text-4xl font-black leading-none drop-shadow-2xl mb-1">{donor.bloodGroup}</div>
+                              <div className="text-[10px] font-bold opacity-90 tracking-widest uppercase">Donor</div>
+                            </div>
+                          </div>
+                        </div>
                       </div>
 
-                      {/* Blood Group Badge */}
-                      <div className="flex flex-col items-center justify-center bg-gradient-to-br from-blue-600 to-blue-700 text-white rounded-lg p-3 min-w-[65px] shadow-xl border-2 border-blue-400">
-                        <div className="text-3xl font-black leading-none drop-shadow-lg">{donor.bloodGroup}</div>
-                        <div className="text-xs mt-1 font-bold opacity-90 tracking-wide">DONOR</div>
+                      {/* Info Grid */}
+                      <div className="grid grid-cols-2 gap-3 mb-4">
+                        {/* Age */}
+                        <div className="bg-gradient-to-br from-black/40 to-black/20 rounded-xl p-3 border border-blue-500/30 backdrop-blur-sm">
+                          <div className="text-gray-400 text-[10px] font-semibold uppercase tracking-wider mb-1">Age</div>
+                          <div className="text-blue-400 font-black text-3xl leading-none">{donor.age}</div>
+                        </div>
+
+                        {/* Gender */}
+                        <div className="bg-gradient-to-br from-black/40 to-black/20 rounded-xl p-3 border border-blue-500/30 backdrop-blur-sm">
+                          <div className="text-gray-400 text-[10px] font-semibold uppercase tracking-wider mb-1">Gender</div>
+                          <div className="flex items-center gap-1.5">
+                            <span className="text-blue-400 text-base">{donor.gender === 'male' ? '♂️' : donor.gender === 'female' ? '♀️' : '⚧'}</span>
+                            <span className="text-blue-400 text-sm font-bold capitalize">{donor.gender}</span>
+                          </div>
+                        </div>
                       </div>
+
+                      {/* Call to Action Button */}
+                      <a
+                        href={`tel:${donor.phoneNumber || donor.phone}`}
+                        className="group/btn relative overflow-hidden flex items-center justify-center gap-3 w-full font-bold py-4 px-6 rounded-xl transition-all duration-300 transform hover:scale-[1.02] active:scale-[0.98] text-center shadow-2xl bg-gradient-to-r from-blue-600 via-blue-700 to-blue-800 hover:from-blue-500 hover:via-blue-600 hover:to-blue-700 text-white shadow-blue-900/50"
+                      >
+                        <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent opacity-0 group-hover/btn:opacity-100 group-hover/btn:translate-x-full transition-all duration-700 ease-out"></div>
+                        <span className="relative text-xl">📞</span>
+                        <span className="relative text-sm tracking-wide">CALL NOW</span>
+                        <span className="relative text-sm font-mono">{donor.phoneNumber || donor.phone}</span>
+                      </a>
                     </div>
-
-                    {/* Location */}
-                    <div className="mb-3 bg-black/30 rounded p-2 border-l-4 border-blue-500">
-                      <div className="flex items-center gap-2 text-white text-xs">
-                        <span>📍</span>
-                        <span className="font-medium">{donor.city}, {donor.state}</span>
-                      </div>
-                    </div>
-
-                    {/* Call Button */}
-                    <a
-                      href={`tel:${donor.phoneNumber || donor.phone}`}
-                      className="flex items-center justify-center gap-2 w-full font-bold py-2.5 px-4 rounded-lg transition-all duration-200 transform hover:scale-105 text-center shadow-lg text-sm bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white"
-                    >
-                      <span>📞</span>
-                      <span>CALL NOW: {donor.phoneNumber || donor.phone}</span>
-                    </a>
                   </div>
                 ))}
               </div>

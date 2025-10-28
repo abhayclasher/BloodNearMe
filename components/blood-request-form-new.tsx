@@ -4,7 +4,7 @@ import type React from "react"
 import { useState } from "react"
 import { getDbClient } from "@/lib/firebase"
 import { collection, addDoc, serverTimestamp } from "firebase/firestore"
-import { INDIAN_STATES, CITIES_BY_STATE, BLOOD_GROUPS } from "@/lib/types"
+import { INDIAN_STATES, CITIES_BY_STATE, BLOOD_GROUPS, BLOOD_REQUEST_REASONS } from "@/lib/types"
 
 export default function BloodRequestFormNew() {
   const [receiverForm, setReceiverForm] = useState({
@@ -15,6 +15,8 @@ export default function BloodRequestFormNew() {
     hospitalName: "",
     urgencyLevel: "normal",
     contactNumber: "",
+    unitsNeeded: "1",
+    reason: "",
   })
 
   const [receiverLoading, setReceiverLoading] = useState(false)
@@ -47,8 +49,9 @@ export default function BloodRequestFormNew() {
         city: receiverForm.city,
         hospital: receiverForm.hospitalName,
         urgency: receiverForm.urgencyLevel,
-        unitsNeeded: 1,
-        description: "Blood request posted",
+        unitsNeeded: parseInt(receiverForm.unitsNeeded) || 1,
+        description: receiverForm.reason || "Blood request posted",
+        reason: receiverForm.reason,
         status: "open",
         createdAt: serverTimestamp(),
       })
@@ -62,6 +65,8 @@ export default function BloodRequestFormNew() {
         hospitalName: "",
         urgencyLevel: "normal",
         contactNumber: "",
+        unitsNeeded: "1",
+        reason: "",
       })
 
       setTimeout(() => setReceiverSuccess(false), 3000)
@@ -148,6 +153,37 @@ export default function BloodRequestFormNew() {
                 </option>
               ))}
             </select>
+
+            <div className="grid grid-cols-2 gap-4">
+              <select
+                name="unitsNeeded"
+                value={receiverForm.unitsNeeded}
+                onChange={handleReceiverChange}
+                className="bg-gray-900 border border-gray-700 rounded-lg px-4 py-3 text-white focus:border-red-600 focus:outline-none transition-colors"
+                required
+              >
+                <option value="">Units Needed</option>
+                {Array.from({ length: 5 }, (_, i) => i + 1).map((unit) => (
+                  <option key={unit} value={unit}>
+                    {unit} {unit === 1 ? 'Unit' : 'Units'}
+                  </option>
+                ))}
+              </select>
+              <select
+                name="reason"
+                value={receiverForm.reason}
+                onChange={handleReceiverChange}
+                className="bg-gray-900 border border-gray-700 rounded-lg px-4 py-3 text-white focus:border-red-600 focus:outline-none transition-colors"
+                required
+              >
+                <option value="">Select Reason</option>
+                {BLOOD_REQUEST_REASONS.map((reason) => (
+                  <option key={reason} value={reason}>
+                    {reason}
+                  </option>
+                ))}
+              </select>
+            </div>
 
             <select
               name="state"
