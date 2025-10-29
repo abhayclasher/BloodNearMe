@@ -1,14 +1,15 @@
 import { initializeApp } from "firebase/app"
 import { getFirestore, collection, addDoc, serverTimestamp } from "firebase/firestore"
 
+// TODO: Replace with your Firebase configuration
 const firebaseConfig = {
-  apiKey: "AIzaSyBzuUUfNzzMQjzwWAJ7k35MpSJExzBuAbg",
-  authDomain: "bloodnearme-cla3her.firebaseapp.com",
-  projectId: "bloodnearme-cla3her",
-  storageBucket: "bloodnearme-cla3her.firebasestorage.app",
-  messagingSenderId: "716508974389",
-  appId: "1:716508974389:web:570f6d7137d56f5026107c",
-  measurementId: "G-YMNTMYG781",
+  apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY || "",
+  authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN || "",
+  projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID || "",
+  storageBucket: process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET || "",
+  messagingSenderId: process.env.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID || "",
+  appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID || "",
+  measurementId: process.env.NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID || "",
 }
 
 const app = initializeApp(firebaseConfig)
@@ -178,31 +179,31 @@ const dummyDonors = [
 
 async function addDummyData() {
   try {
-    console.log("[v0] Starting to add dummy data...")
+    console.log("Starting to add sample data...")
 
     // Add blood requests
-    console.log("[v0] Adding blood requests...")
+    console.log("Adding blood requests...")
     for (const request of dummyRequests) {
       await addDoc(collection(db, "bloodRequests"), {
         ...request,
         createdAt: serverTimestamp(),
       })
     }
-    console.log("[v0] Added", dummyRequests.length, "blood requests")
+    console.log("Added", dummyRequests.length, "blood requests")
 
     // Add donors
-    console.log("[v0] Adding donors...")
+    console.log("Adding donors...")
     for (const donor of dummyDonors) {
       await addDoc(collection(db, "donors"), {
         ...donor,
         createdAt: serverTimestamp(),
       })
     }
-    console.log("[v0] Added", dummyDonors.length, "donors")
+    console.log("Added", dummyDonors.length, "donors")
 
-    console.log("[v0] Dummy data added successfully!")
+    console.log("Sample data added successfully!")
   } catch (error) {
-    console.error("[v0] Error adding dummy data:", error)
+    console.error("Error adding sample data:", error)
   }
 }
 
