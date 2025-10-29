@@ -1,4 +1,5 @@
 <h1 align="center">🩸 BloodNearMe</h1>
+![License: MIT](https://img.shields.io/badge/License-MIT-red.svg)
 
 <p align="center">
   <b>Connecting Lives, One Drop at a Time</b>  
