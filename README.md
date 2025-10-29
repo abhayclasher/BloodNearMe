@@ -1,156 +1,148 @@
-🩸 BloodNearMe
-Find Blood Donors and Receivers Near You – Instantly.
-<p align="center"> <img src="https://img.shields.io/badge/Next.js-16.0-black?style=for-the-badge&logo=nextdotjs" /> <img src="https://img.shields.io/badge/TypeScript-3178C6?style=for-the-badge&logo=typescript&logoColor=white" /> <img src="https://img.shields.io/badge/Firebase-FFCA28?style=for-the-badge&logo=firebase&logoColor=black" /> <img src="https://img.shields.io/badge/TailwindCSS-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white" /> <img src="https://img.shields.io/badge/Vercel-000000?style=for-the-badge&logo=vercel&logoColor=white" /> </p>
-🌍 Overview
+<h1 align="center">🩸 BloodNearMe</h1>
+![License: MIT](https://img.shields.io/badge/License-MIT-red.svg)
 
-BloodNearMe is an India-based, real-time blood donor and receiver platform that connects people instantly.
-No sign-up or authentication — just pure, fast, life-saving connections.
+<p align="center">
+  <b>Connecting Lives, One Drop at a Time</b>  
+  <br>
+  A modern, India-based real-time blood donor and receiver platform built with <b>Next.js 16</b> + <b>Firebase Firestore</b>.  
+  <br>
+  <a href="https://blood-near-me.vercel.app/" target="_blank"><b>🌐 Live Website</b></a>
+</p>
 
-🩸 Submit your details as a donor or request blood as a receiver,
-and your post appears instantly on the feed with a direct Contact button.
+---
 
-🌙 Dark mode is default, because life looks better that way.
+## ✨ Overview
+BloodNearMe is an open community platform that helps connect **blood donors** and **receivers** across India instantly — no sign-ups, no waiting.  
+Post requests or find donors with verified, real-time listings filtered by **state, city, and blood group**.  
 
-🖼 Preview
+🩸 **Mission:** Ensure *no life is lost due to blood shortage*  
+🌍 **Vision:** Build *India’s largest community-driven blood donation network*
 
-🧭 Here’s a quick look at the design and feel of the app
+---
 
-<p align="center"> <img src="https://github.com/abhayclasher/BloodNearMe/assets/preview1.png" width="800" alt="Home Page" /> </p> <p align="center"> <img src="https://github.com/abhayclasher/BloodNearMe/assets/preview2.png" width="800" alt="Feed Page" /> </p>
-🚀 Key Features
+## ⚡ Features
 
-✨ No Login Required – Use instantly, no friction.
-📍 Smart Location Forms – State & City data for all of India.
-🩸 Instant Feed Posting – Requests go live the moment you submit.
-📱 One-Tap Contact – Connect instantly through call or email.
-🌙 Dark Mode by Default – Sleek, modern interface with light toggle.
-⚡ Realtime Updates – Firestore ensures instant syncing.
-🎨 Responsive Design – Beautiful on mobile, tablet, or desktop.
+✅ **Dark Mode by Default** — Elegant black-red theme for comfort & focus  
+✅ **Firestore Database** — Real-time updates for blood requests and donors  
+✅ **Direct Contact Option** — Instantly call donors or receivers via one click  
+✅ **India-wide Coverage** — Choose your state and city for localized listings  
+✅ **No Login Needed** — Simple, anonymous, and community-first design  
+✅ **Responsive Design** — Optimized for all devices (mobile to desktop)  
 
-🧩 Tech Stack
-Category	Technology
-Framework	Next.js 16 (App Router, TypeScript)
-UI Library	Tailwind CSS + shadcn/ui
-Database	Firebase Firestore
-Hosting	Vercel
-Animation	Framer Motion
-Version Control	Git + GitHub
-🧱 Project Structure
+---
+
+## 🧱 Tech Stack
+
+| Category | Technology |
+|-----------|-------------|
+| **Frontend** | Next.js 16 (App Router), React, TypeScript |
+| **Database** | Firebase Firestore |
+| **Styling** | TailwindCSS |
+| **Hosting** | Vercel |
+| **Theme** | Default Dark Mode + Light Mode Toggle |
+| **Icons** | Lucide React |
+
+---
+
+## 🧭 Pages & Previews
+
+### 🏠 Home
+Connect instantly with donors and receivers, view urgent requests, and get real-time updates.  
+![Home Page](/public/home.png)
+
+---
+
+### 🔍 Find Donors
+Search verified donors by **state** and **blood group** — get contact info directly.  
+![Find Donors](/public/donors.png)
+
+---
+
+### 🩸 About
+Learn about BloodNearMe’s mission, vision, and commitment to saving lives.  
+![About Page](/public/about.png)
+
+---
+
+### 👨‍💻 Developer Profile
+Meet the creator — a young developer building for a cause.  
+![Developer Profile](/public/aboutdev.png)
+
+---
+
+## 🧩 Project Structure
+
+```bash
 BloodNearMe/
-├── app/
-│   ├── donor/              # Donor registration page
-│   ├── request/            # Receiver request form
-│   ├── feed/               # Live feed of posts
-│   ├── layout.tsx          # Root layout (dark/light mode)
-│   ├── globals.css         # Tailwind base styles
-│   └── page.tsx            # Home page
 │
-├── components/
-│   ├── donor-form.tsx
-│   ├── request-form.tsx
-│   ├── post-card.tsx
-│   ├── navbar.tsx
-│   └── theme-toggle.tsx
+├── app/
+│   ├── about/
+│   ├── admin/
+│   ├── donor/
+│   ├── find/
+│   ├── map/
+│   ├── request/
+│   └── ...
 │
 ├── lib/
-│   ├── firebase.ts         # Firestore setup
-│   └── data.ts             # Indian states & cities
+│   ├── firebase.ts
+│   └── types.ts
 │
 ├── public/
-│   └── icons/, assets/
+│   ├── home.png
+│   ├── donors.png
+│   ├── about.png
+│   └── aboutdev.png
 │
-├── .env.example
-├── package.json
-└── README.md
+└── package.json
+```
+## 🚀 Deployment
 
-⚙️ Setup & Installation
-1️⃣ Clone this Repository
-git clone https://github.com/abhayclasher/BloodNearMe.git
+Deployed seamlessly on **Vercel** for blazing-fast speed and scalability.  
+Visit the live site → **[blood-near-me.vercel.app](https://blood-near-me.vercel.app/)**  
+
+To deploy your own:
+```
+git clone https://github.com/yourusername/BloodNearMe.git
 cd BloodNearMe
-
-2️⃣ Install Dependencies
 npm install
+npm run build
+npm start
+```
 
-3️⃣ Configure Firebase
+## ❤️ Credits  
 
-Go to Firebase Console
+<div align="center">
 
-Create a project and enable Firestore Database
+### 👨‍💻 Developed by  
+# **Abhay Kumar**  
 
-Copy your credentials and create a .env file:
+🧠 21-year-old Full Stack Web Developer from **Kolkata, India 🇮🇳**  
+Building technology that **saves lives through community collaboration.**
 
-NEXT_PUBLIC_FIREBASE_API_KEY=YOUR_API_KEY
-NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN=YOUR_AUTH_DOMAIN
-NEXT_PUBLIC_FIREBASE_PROJECT_ID=YOUR_PROJECT_ID
-NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET=YOUR_STORAGE_BUCKET
-NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID=YOUR_SENDER_ID
-NEXT_PUBLIC_FIREBASE_APP_ID=YOUR_APP_ID
+---
 
-4️⃣ Run Locally
-npm run dev
+<p align="center">
+  <a href="https://abhaypro.com" target="_blank">
+    <img src="https://img.shields.io/badge/🌍 Website-FF4747?style=for-the-badge&logo=google-chrome&logoColor=white" alt="Website" />
+  </a>
+  <a href="https://github.com/abhayclasher" target="_blank">
+    <img src="https://img.shields.io/badge/GitHub-1C1C1C?style=for-the-badge&logo=github&logoColor=white" alt="GitHub" />
+  </a>
+  <a href="https://linkedin.com/in/abhayclasher" target="_blank">
+    <img src="https://img.shields.io/badge/LinkedIn-0A66C2?style=for-the-badge&logo=linkedin&logoColor=white" alt="LinkedIn" />
+  </a>
+  <a href="mailto:abhaypro.cloud@gmail.com" target="_blank">
+    <img src="https://img.shields.io/badge/Email-D14836?style=for-the-badge&logo=gmail&logoColor=white" alt="Email" />
+  </a>
+</p>
 
+---
 
-🌐 Visit: http://localhost:3000
+<p align="center">
+  <b>“Every drop counts. Every second matters.”</b>  
+  <br>❤️ Made with love in India 🇮🇳
+</p>
 
-⚒️ Build Commands
-Command	Description
-npm run dev	Start local dev server
-npm run build	Create optimized production build
-npm start	Run the production server
-npm run lint	Lint and format code
-☁️ Deploy to Vercel
+</div>
 
-Go to https://vercel.com
-
-Click Import Project → GitHub → BloodNearMe
-
-Add .env values to Environment Variables
-
-Click Deploy 🚀
-
-Your project will be live globally within minutes!
-
-🧠 How It Works
-
-1️⃣ Donor or receiver fills out the form.
-2️⃣ Data is sent to Firebase Firestore.
-3️⃣ Feed page listens to Firestore updates.
-4️⃣ Posts appear instantly with name, location, and contact button.
-
-🎨 UI Highlights
-
-💎 Dark Mode Default — smooth, eye-friendly palette.
-🎛 Light Mode Toggle — for day readers.
-🩸 Post Cards — minimal, bold, and color-coded by urgency.
-📞 Contact Buttons — tel: and mailto: integrated for direct reach.
-📶 Realtime Firestore Sync — automatic post updates, no refresh.
-
-❤️ Contributing
-
-Contributions welcome!
-
-Fork this repo
-
-Create a feature branch
-
-Commit your changes
-
-Submit a PR
-
-📜 License
-
-🪶 Licensed under the MIT License.
-Feel free to modify and share with attribution.
-
-✨ Credits & Acknowledgments
-
-Built with ❤️ by Abhay
-Special thanks to:
-
-Next.js, Tailwind CSS, Firebase
-
-Open-source contributors supporting lifesaving tech
-
-📱 Follow & Connect
-<p align="center"> <a href="mailto:abhaypro.cloud@gmail.com"><img src="https://img.shields.io/badge/Email%20Me-D14836?style=for-the-badge&logo=gmail&logoColor=white" /></a> <a href="https://github.com/abhayclasher"><img src="https://img.shields.io/badge/GitHub-181717?style=for-the-badge&logo=github&logoColor=white" /></a> <a href="https://www.linkedin.com/in/abhayclasher"><img src="https://img.shields.io/badge/LinkedIn-0A66C2?style=for-the-badge&logo=linkedin&logoColor=white" /></a> </p>
-
-💡 “Every drop counts. Every donor matters.”
