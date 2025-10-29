@@ -42,19 +42,19 @@ export default function Navbar() {
 
         {isOpen && (
           <div className="md:hidden pb-4 space-y-2 border-t border-border pt-4 text-white">
-            <Link href="/" className="block py-2 hover:text-primary font-medium">
+            <Link href="/" className="block py-2 hover:text-primary font-medium" onClick={() => setIsOpen(false)}>
               Home
             </Link>
-            <Link href="/find" className="block py-2 hover:text-primary font-medium">
+            <Link href="/find" className="block py-2 hover:text-primary font-medium" onClick={() => setIsOpen(false)}>
               Find Donor
             </Link>
-            <Link href="/request" className="block py-2 hover:text-primary font-medium">
+            <Link href="/request" className="block py-2 hover:text-primary font-medium" onClick={() => setIsOpen(false)}>
               Request Blood
             </Link>
-            <Link href="/donor" className="block py-2 hover:text-primary font-medium">
+            <Link href="/donor" className="block py-2 hover:text-primary font-medium" onClick={() => setIsOpen(false)}>
               Become a Donor
             </Link>
-            <Link href="/about" className="block py-2 hover:text-primary font-medium">
+            <Link href="/about" className="block py-2 hover:text-primary font-medium" onClick={() => setIsOpen(false)}>
               About
             </Link>
           </div>
