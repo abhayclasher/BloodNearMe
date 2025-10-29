@@ -1,261 +1,156 @@
-# BloodNearMe
+🩸 BloodNearMe
+Find Blood Donors and Receivers Near You – Instantly.
+<p align="center"> <img src="https://img.shields.io/badge/Next.js-16.0-black?style=for-the-badge&logo=nextdotjs" /> <img src="https://img.shields.io/badge/TypeScript-3178C6?style=for-the-badge&logo=typescript&logoColor=white" /> <img src="https://img.shields.io/badge/Firebase-FFCA28?style=for-the-badge&logo=firebase&logoColor=black" /> <img src="https://img.shields.io/badge/TailwindCSS-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white" /> <img src="https://img.shields.io/badge/Vercel-000000?style=for-the-badge&logo=vercel&logoColor=white" /> </p>
+🌍 Overview
+
+BloodNearMe is an India-based, real-time blood donor and receiver platform that connects people instantly.
+No sign-up or authentication — just pure, fast, life-saving connections.
+
+🩸 Submit your details as a donor or request blood as a receiver,
+and your post appears instantly on the feed with a direct Contact button.
+
+🌙 Dark mode is default, because life looks better that way.
+
+🖼 Preview
+
+🧭 Here’s a quick look at the design and feel of the app
+
+<p align="center"> <img src="https://github.com/abhayclasher/BloodNearMe/assets/preview1.png" width="800" alt="Home Page" /> </p> <p align="center"> <img src="https://github.com/abhayclasher/BloodNearMe/assets/preview2.png" width="800" alt="Feed Page" /> </p>
+🚀 Key Features
+
+✨ No Login Required – Use instantly, no friction.
+📍 Smart Location Forms – State & City data for all of India.
+🩸 Instant Feed Posting – Requests go live the moment you submit.
+📱 One-Tap Contact – Connect instantly through call or email.
+🌙 Dark Mode by Default – Sleek, modern interface with light toggle.
+⚡ Realtime Updates – Firestore ensures instant syncing.
+🎨 Responsive Design – Beautiful on mobile, tablet, or desktop.
+
+🧩 Tech Stack
+Category	Technology
+Framework	Next.js 16 (App Router, TypeScript)
+UI Library	Tailwind CSS + shadcn/ui
+Database	Firebase Firestore
+Hosting	Vercel
+Animation	Framer Motion
+Version Control	Git + GitHub
+🧱 Project Structure
+BloodNearMe/
+├── app/
+│   ├── donor/              # Donor registration page
+│   ├── request/            # Receiver request form
+│   ├── feed/               # Live feed of posts
+│   ├── layout.tsx          # Root layout (dark/light mode)
+│   ├── globals.css         # Tailwind base styles
+│   └── page.tsx            # Home page
+│
+├── components/
+│   ├── donor-form.tsx
+│   ├── request-form.tsx
+│   ├── post-card.tsx
+│   ├── navbar.tsx
+│   └── theme-toggle.tsx
+│
+├── lib/
+│   ├── firebase.ts         # Firestore setup
+│   └── data.ts             # Indian states & cities
+│
+├── public/
+│   └── icons/, assets/
+│
+├── .env.example
+├── package.json
+└── README.md
 
-## Overview
+⚙️ Setup & Installation
+1️⃣ Clone this Repository
+git clone https://github.com/abhayclasher/BloodNearMe.git
+cd BloodNearMe
 
-This project aims to connect individuals in need of blood with potential donors in their vicinity. While the description is currently limited, the core functionality revolves around facilitating blood donations through a user-friendly interface.
-
-## Key Features & Benefits
+2️⃣ Install Dependencies
+npm install
 
-*   **Donor Discovery:** Easily find potential blood donors near you.
-*   **User-Friendly Interface:** A streamlined and intuitive design for effortless navigation.
-*   **Admin Dashboard:** Functionality for administrators to manage users and data.
-*   **Real-Time Updates:** Potentially utilizes real-time data for up-to-date information on blood availability.
+3️⃣ Configure Firebase
 
-## Technologies
+Go to Firebase Console
 
-### Languages
+Create a project and enable Firestore Database
 
-*   TypeScript
+Copy your credentials and create a .env file:
 
-### Tools & Technologies
+NEXT_PUBLIC_FIREBASE_API_KEY=YOUR_API_KEY
+NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN=YOUR_AUTH_DOMAIN
+NEXT_PUBLIC_FIREBASE_PROJECT_ID=YOUR_PROJECT_ID
+NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET=YOUR_STORAGE_BUCKET
+NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID=YOUR_SENDER_ID
+NEXT_PUBLIC_FIREBASE_APP_ID=YOUR_APP_ID
 
-*   Node.js
-*   Firebase (for backend services like Firestore and Storage)
-*   Tailwind CSS (for styling)
-*   Next.js (Potentially the underlying framework)
-
-## Prerequisites & Dependencies
-
-Before you begin, ensure you have the following installed:
-
-*   **Node.js:** (version >= 16 recommended) - [https://nodejs.org/](https://nodejs.org/)
-*   **npm** or **yarn:** (package manager)
-*   **Firebase Account:** Required for configuring Firebase services.
-
-## Installation & Setup Instructions
-
-1.  **Clone the repository:**
-
-    ```bash
-    git clone https://github.com/abhayclasher/BloodNearMe.git
-    cd BloodNearMe
-    ```
+4️⃣ Run Locally
+npm run dev
 
-2.  **Install dependencies:**
 
-    ```bash
-    npm install  # or yarn install
-    ```
+🌐 Visit: http://localhost:3000
 
-3.  **Configure Firebase:**
+⚒️ Build Commands
+Command	Description
+npm run dev	Start local dev server
+npm run build	Create optimized production build
+npm start	Run the production server
+npm run lint	Lint and format code
+☁️ Deploy to Vercel
 
-    *   Create a Firebase project in the Firebase console ([https://console.firebase.google.com/](https://console.firebase.google.com/)).
-    *   Enable Firestore and Storage in your Firebase project.
-    *   Obtain your Firebase configuration details (API key, project ID, storage bucket, etc.).
-    *   Create a `.env` file (or similar environment variable mechanism) and set the following environment variables:
+Go to https://vercel.com
 
-        ```
-        NEXT_PUBLIC_FIREBASE_API_KEY=YOUR_FIREBASE_API_KEY
-        NEXT_PUBLIC_FIREBASE_PROJECT_ID=YOUR_FIREBASE_PROJECT_ID
-        NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET=YOUR_FIREBASE_STORAGE_BUCKET
-        NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID=YOUR_FIREBASE_MESSAGING_SENDER_ID
-        NEXT_PUBLIC_FIREBASE_APP_ID=YOUR_FIREBASE_APP_ID
-        ```
+Click Import Project → GitHub → BloodNearMe
 
-4.  **Start the development server:**
+Add .env values to Environment Variables
 
-    ```bash
-    npm run dev  # or yarn dev
-    ```
+Click Deploy 🚀
 
-    This will typically start the application at `http://localhost:3000`.
+Your project will be live globally within minutes!
 
-## Project Structure
+🧠 How It Works
 
-```
-├── .gitignore
-├── .meta.json
-├── app.info
-└── app/
-    ├── about/
-    │   └── page.tsx
-    ├── admin/
-    │   └── dashboard/
-    │       ├── loading.tsx
-    │       ├── page.tsx
-    │       └── layout.tsx
-    ├── page.tsx
-    └── donor/
-    │   └── page.tsx
-    └── find/
-        ├── loading.tsx
-        ├── page.tsx
-        ├── globals.css
-        └── layout.tsx
-        └── page.tsx
-```
+1️⃣ Donor or receiver fills out the form.
+2️⃣ Data is sent to Firebase Firestore.
+3️⃣ Feed page listens to Firestore updates.
+4️⃣ Posts appear instantly with name, location, and contact button.
 
-*   **`.gitignore`:** Specifies intentionally untracked files that Git should ignore.
-*   **`app/`:** Contains the main application code, likely using Next.js's `app` router.
-    *   **`about/`:**  Page for information about the application.
-    *   **`admin/`:** Contains administrative functionalities.
-        *   **`dashboard/`:** The admin dashboard.
-    *   **`donor/`:** Page related to donor information.
-    *   **`find/`:** Pages related to finding blood.
-    *   **`globals.css`:** Global CSS file, likely using Tailwind CSS for styling.
-*   **.meta.json, app.info:** Meta data or configuration files.
+🎨 UI Highlights
 
-## Important Files
+💎 Dark Mode Default — smooth, eye-friendly palette.
+🎛 Light Mode Toggle — for day readers.
+🩸 Post Cards — minimal, bold, and color-coded by urgency.
+📞 Contact Buttons — tel: and mailto: integrated for direct reach.
+📶 Realtime Firestore Sync — automatic post updates, no refresh.
 
-### `app/globals.css`
-
-```css
-@import "tailwindcss";
-@import "tw-animate-css";
+❤️ Contributing
 
-@custom-variant dark (&:is(.dark *));
+Contributions welcome!
 
-:root {
-  --background: oklch(1 0 0);
-  --foreground: oklch(0.145 0 0);
-  --card: oklch(1 0 0);
-  --card-foreground: oklch(0.145 0 0);
-  --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.145 0 0);
-  --primary: oklch(0.205 0 0);
-  --primary-foreground: oklch(0.985 0 0);
-  --secondary: oklch(0.97 0 0);
-  --secondary-foreground: oklch(0.205 0 0);
-  --muted: oklch(0.97 0 0);
-  --muted-foreground: oklch(0....
-```
+Fork this repo
 
-This file sets up the global CSS styles, primarily using Tailwind CSS for utility-first styling. It also includes custom CSS variables for theming.
+Create a feature branch
 
-### `components/ui/use-toast.ts`
+Commit your changes
 
-```ts
-'use client'
+Submit a PR
 
-// Inspired by react-hot-toast library
-import * as React from 'react'
+📜 License
 
-import type { ToastActionElement, ToastProps } from '@/components/ui/toast'
+🪶 Licensed under the MIT License.
+Feel free to modify and share with attribution.
 
-const TOAST_LIMIT = 1
-const TOAST_REMOVE_DELAY = 1000000
+✨ Credits & Acknowledgments
 
-type ToasterToast = ToastProps & {
-  id: string
-  title?: React.ReactNode
-  description?: React.ReactNode
-  action?: ToastActionElement
-}
+Built with ❤️ by Abhay
+Special thanks to:
 
-const actionTypes = {
-  ADD_TOAST: 'ADD_TOAST',
-  UPDATE_TOAST: 'UPDATE_TOAST',
-  DISMISS_TOAST: 'DISMISS_TOAST',
-  REMOVE_TOAST: 'REMOVE_TOA...
-```
+Next.js, Tailwind CSS, Firebase
 
-This file defines a custom hook for managing toast notifications, likely inspired by the `react-hot-toast` library.
+Open-source contributors supporting lifesaving tech
 
-### `hooks/use-mobile.ts`
+📱 Follow & Connect
+<p align="center"> <a href="mailto:abhaypro.cloud@gmail.com"><img src="https://img.shields.io/badge/Email%20Me-D14836?style=for-the-badge&logo=gmail&logoColor=white" /></a> <a href="https://github.com/abhayclasher"><img src="https://img.shields.io/badge/GitHub-181717?style=for-the-badge&logo=github&logoColor=white" /></a> <a href="https://www.linkedin.com/in/abhayclasher"><img src="https://img.shields.io/badge/LinkedIn-0A66C2?style=for-the-badge&logo=linkedin&logoColor=white" /></a> </p>
 
-```ts
-import * as React from 'react'
-
-const MOBILE_BREAKPOINT = 768
-
-export function useIsMobile() {
-  const [isMobile, setIsMobile] = React.useState<boolean | undefined>(undefined)
-
-  React.useEffect(() => {
-    const mql = window.matchMedia(`(max-width: ${MOBILE_BREAKPOINT - 1}px)`)
-    const onChange = () => {
-      setIsMobile(window.innerWidth < MOBILE_BREAKPOINT)
-    }
-    mql.addEventListener('change', onChange)
-    setIsMobile(window.innerWidth < MOBILE_BREAKPOINT)
-    return () => mql.removeE...
-```
-
-This custom hook determines if the user is on a mobile device based on the screen width.
-
-### `hooks/use-toast.ts`
-
-```ts
-'use client'
-
-// Inspired by react-hot-toast library
-import * as React from 'react'
-
-import type { ToastActionElement, ToastProps } from '@/components/ui/toast'
-
-const TOAST_LIMIT = 1
-const TOAST_REMOVE_DELAY = 1000000
-
-type ToasterToast = ToastProps & {
-  id: string
-  title?: React.ReactNode
-  description?: React.ReactNode
-  action?: ToastActionElement
-}
-
-const actionTypes = {
-  ADD_TOAST: 'ADD_TOAST',
-  UPDATE_TOAST: 'UPDATE_TOAST',
-  DISMISS_TOAST: 'DISMISS_TOAST',
-  REMOVE_TOAST: 'REMOVE_TOA...
-```
-
-This file is a duplicate of the first `use-toast.ts` file. A future cleanup should eliminate the duplication.
-
-### `lib/firebase.ts`
-
-```ts
-import { initializeApp, getApps, type FirebaseApp } from "firebase/app";
-import { getFirestore, type Firestore } from "firebase/firestore";
-import { getStorage, type FirebaseStorage } from "firebase/storage";
-
-type FirestoreType = Firestore;
-type StorageType = FirebaseStorage;
-
-const firebaseConfig = {
-  apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
-  projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID,
-  storageBucket: process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET,
-  messagingSenderId:...
-```
-
-This file initializes the Firebase connection and exports instances of Firestore and Storage, enabling interaction with Firebase services.
-
-## Usage Examples & API Documentation
-
-Detailed API documentation will be provided in a separate document.  For now, refer to the Firebase documentation for using Firestore and Storage:
-
-*   **Firestore:** [https://firebase.google.com/docs/firestore](https://firebase.google.com/docs/firestore)
-*   **Storage:** [https://firebase.google.com/docs/storage](https://firebase.google.com/docs/storage)
-
-## Configuration Options
-
-*   **Firebase Configuration:**  Configure your Firebase settings using environment variables as described in the Installation & Setup section.
-
-## Contributing Guidelines
-
-We welcome contributions to improve BloodNearMe! To contribute:
-
-1.  Fork the repository.
-2.  Create a new branch for your feature or bug fix.
-3.  Make your changes and commit them with descriptive messages.
-4.  Submit a pull request with a clear explanation of your changes.
-
-## License Information
-
-License information will be added in a future update.
-
-## Acknowledgments
-
-*   This project utilizes Firebase for backend services.
-*   The UI design is powered by Tailwind CSS.
+💡 “Every drop counts. Every donor matters.”
