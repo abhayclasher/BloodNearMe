@@ -91,7 +91,7 @@ export default function DonorForm() {
   }
 
   return (
-    <section className="pt-0 pb-16 px-4 bg-background">
+    <section className="pt-0 pb-12 px-4 bg-gradient-to-b from-background via-card/20 to-background">
       <style>{`
         @keyframes slideInForm {
           from {
@@ -119,25 +119,39 @@ export default function DonorForm() {
         }
       `}</style>
 
-      <div className="max-w-2xl mx-auto">
-        <div className="text-center mb-12">
-          <h2 className="text-4xl md:text-5xl font-bold text-white mb-4">Become a Life Saver</h2>
-          <p className="text-white text-lg">
-            Join our community of blood donors and help save lives across India.
-          </p>
+      {/* Hero Header */}
+      <div className="bg-gradient-to-r from-green-950/40 via-green-900/30 to-green-950/40 border-b border-green-900/30 -mx-4 px-4 mb-6">
+        <div className="max-w-7xl mx-auto py-8">
+          <div className="text-center">
+            <div className="inline-block mb-4 px-4 py-2 bg-green-600/10 border border-green-600/20 rounded-full text-green-500 text-sm font-medium">
+              🫂 Be a Hero
+            </div>
+            <h2 className="text-4xl md:text-6xl font-bold mb-4 bg-gradient-to-r from-white via-green-300 to-white bg-clip-text text-transparent">
+              Become a Life Saver
+            </h2>
+            <p className="text-white text-lg md:text-xl max-w-2xl mx-auto">
+              Join our community of blood donors and help save lives across India. Your donation can make all the difference.
+            </p>
+          </div>
         </div>
+      </div>
 
-        <div className="bg-card border-2 border-blue-600/30 rounded-xl p-8 form-slide form-glow-blue hover:border-blue-600 transition-all duration-300">
-          <div className="flex items-center gap-3 mb-8">
-            <div className="w-12 h-12 bg-blue-600 rounded-full flex items-center justify-center text-white text-xl">
+      <div className="max-w-2xl mx-auto">
+        <div className="bg-gradient-to-br from-card/90 via-card/80 to-card/90 backdrop-blur-sm border-2 border-blue-600/30 rounded-2xl p-8 md:p-10 form-slide form-glow-blue hover:border-blue-600 transition-all duration-300 shadow-2xl">
+          <div className="flex items-center gap-4 mb-8">
+            <div className="w-14 h-14 bg-gradient-to-br from-blue-600 to-blue-700 rounded-2xl flex items-center justify-center text-white text-3xl shadow-lg">
               🩸
             </div>
-            <h3 className="text-3xl font-bold text-white">Become a Donor</h3>
+            <div>
+              <h3 className="text-3xl font-bold text-white">Donor Registration</h3>
+              <p className="text-gray-400 text-sm">Fill in your details to join</p>
+            </div>
           </div>
 
           {donorSuccess && (
-            <div className="mb-4 bg-green-500/20 border border-green-500 text-green-400 p-3 rounded-lg text-sm">
-              ✓ Thank you! Your donor profile has been created.
+            <div className="mb-6 bg-gradient-to-r from-green-500/20 to-green-600/20 border-2 border-green-500 text-green-400 p-4 rounded-xl text-sm font-semibold flex items-center gap-3 shadow-lg">
+              <span className="text-2xl">✅</span>
+              <span>Thank you! Your donor profile has been created successfully.</span>
             </div>
           )}
 
@@ -287,9 +301,22 @@ export default function DonorForm() {
             <button
               type="submit"
               disabled={donorLoading}
-              className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 rounded-lg transition-all duration-200 transform hover:scale-105 disabled:opacity-50"
+              className="group w-full bg-gradient-to-r from-blue-600 via-blue-700 to-blue-800 hover:from-blue-700 hover:via-blue-800 hover:to-blue-900 text-white font-bold py-4 rounded-xl transition-all duration-300 transform hover:scale-105 disabled:opacity-50 shadow-2xl hover:shadow-blue-600/50 flex items-center justify-center gap-3"
             >
-              {donorLoading ? "Registering..." : "Register as Donor"}
+              {donorLoading ? (
+                <>
+                  <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                  <span>Registering...</span>
+                </>
+              ) : (
+                <>
+                  <span className="text-xl">🩸</span>
+                  <span>Register as Donor</span>
+                  <svg className="w-5 h-5 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                  </svg>
+                </>
+              )}
             </button>
           </form>
         </div>

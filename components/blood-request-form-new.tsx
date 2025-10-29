@@ -78,7 +78,7 @@ export default function BloodRequestFormNew() {
   }
 
   return (
-    <section className="pt-0 pb-16 px-4 bg-background">
+    <section className="pt-0 pb-12 px-4 bg-gradient-to-b from-background via-card/20 to-background">
       <style>{`
         @keyframes slideInForm {
           from {
@@ -106,25 +106,39 @@ export default function BloodRequestFormNew() {
         }
       `}</style>
 
-      <div className="max-w-2xl mx-auto">
-        <div className="text-center mb-12">
-          <h2 className="text-4xl md:text-5xl font-bold text-white mb-4">Request Blood</h2>
-          <p className="text-white text-lg">
-            Post your blood request and connect with nearby donors who can help save a life.
-          </p>
+      {/* Hero Header */}
+      <div className="bg-gradient-to-r from-red-950/40 via-red-900/30 to-red-950/40 border-b border-red-900/30 -mx-4 px-4 mb-6">
+        <div className="max-w-7xl mx-auto py-8">
+          <div className="text-center">
+            <div className="inline-block mb-4 px-4 py-2 bg-red-600/10 border border-red-600/20 rounded-full text-red-500 text-sm font-medium">
+              🆘 Urgent Help
+            </div>
+            <h2 className="text-4xl md:text-6xl font-bold mb-4 bg-gradient-to-r from-white via-red-300 to-white bg-clip-text text-transparent">
+              Request Blood
+            </h2>
+            <p className="text-white text-lg md:text-xl max-w-2xl mx-auto">
+              Post your blood request and connect with nearby donors instantly. Help is just a call away.
+            </p>
+          </div>
         </div>
+      </div>
 
-        <div className="bg-card border-2 border-red-600/30 rounded-xl p-8 form-slide form-glow-red hover:border-red-600 transition-all duration-300">
-          <div className="flex items-center gap-3 mb-8">
-            <div className="w-12 h-12 bg-red-600 rounded-full flex items-center justify-center text-white text-xl">
+      <div className="max-w-2xl mx-auto">
+        <div className="bg-gradient-to-br from-card/90 via-card/80 to-card/90 backdrop-blur-sm border-2 border-red-600/30 rounded-2xl p-8 md:p-10 form-slide form-glow-red hover:border-red-600 transition-all duration-300 shadow-2xl">
+          <div className="flex items-center gap-4 mb-8">
+            <div className="w-14 h-14 bg-gradient-to-br from-red-600 to-red-700 rounded-2xl flex items-center justify-center text-white text-3xl shadow-lg">
               🆘
             </div>
-            <h3 className="text-3xl font-bold text-white">Need Blood</h3>
+            <div>
+              <h3 className="text-3xl font-bold text-white">Blood Request Form</h3>
+              <p className="text-gray-400 text-sm">We'll help you find donors</p>
+            </div>
           </div>
 
           {receiverSuccess && (
-            <div className="mb-4 bg-green-500/20 border border-green-500 text-green-400 p-3 rounded-lg text-sm">
-              ✓ Your blood request has been posted successfully!
+            <div className="mb-6 bg-gradient-to-r from-green-500/20 to-green-600/20 border-2 border-green-500 text-green-400 p-4 rounded-xl text-sm font-semibold flex items-center gap-3 shadow-lg">
+              <span className="text-2xl">✅</span>
+              <span>Your blood request has been posted successfully! Donors will contact you soon.</span>
             </div>
           )}
 
@@ -250,9 +264,22 @@ export default function BloodRequestFormNew() {
             <button
               type="submit"
               disabled={receiverLoading}
-              className="w-full bg-red-600 hover:bg-red-700 text-white font-bold py-3 rounded-lg transition-all duration-200 transform hover:scale-105 disabled:opacity-50"
+              className="group w-full bg-gradient-to-r from-red-600 via-red-700 to-red-800 hover:from-red-700 hover:via-red-800 hover:to-red-900 text-white font-bold py-4 rounded-xl transition-all duration-300 transform hover:scale-105 disabled:opacity-50 shadow-2xl hover:shadow-red-600/50 flex items-center justify-center gap-3"
             >
-              {receiverLoading ? "Posting..." : "Submit Request"}
+              {receiverLoading ? (
+                <>
+                  <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                  <span>Posting Request...</span>
+                </>
+              ) : (
+                <>
+                  <span className="text-xl">🆘</span>
+                  <span>Submit Blood Request</span>
+                  <svg className="w-5 h-5 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                  </svg>
+                </>
+              )}
             </button>
           </form>
         </div>

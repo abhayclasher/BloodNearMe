@@ -83,26 +83,45 @@ export default function AllDonors() {
   }
 
   return (
-    <section className="pt-0 pb-16 px-4 bg-background">
-      <div className="max-w-6xl mx-auto">
-        <div className="text-center mb-12">
-          <h2 className="text-4xl md:text-5xl font-bold text-white mb-4">Find Blood Donors</h2>
-          <p className="text-white text-lg">
-            Connect with registered blood donors in your area
-          </p>
+    <section className="pt-0 pb-12 px-4 bg-gradient-to-b from-background via-card/20 to-background">
+      {/* Hero Header */}
+      <div className="bg-gradient-to-r from-blue-950/40 via-blue-900/30 to-blue-950/40 border-b border-blue-900/30 -mx-4 px-4 mb-6">
+        <div className="max-w-7xl mx-auto py-8">
+          <div className="text-center">
+            <div className="inline-block mb-4 px-4 py-2 bg-blue-600/10 border border-blue-600/20 rounded-full text-blue-500 text-sm font-medium">
+              🔍 Search & Connect
+            </div>
+            <h2 className="text-4xl md:text-6xl font-bold mb-4 bg-gradient-to-r from-white via-blue-300 to-white bg-clip-text text-transparent">
+              Find Blood Donors
+            </h2>
+            <p className="text-white text-lg md:text-xl max-w-2xl mx-auto">
+              Connect with verified blood donors in your area. Search by state and blood group.
+            </p>
+          </div>
         </div>
+      </div>
 
-        <form onSubmit={handleSearch} className="bg-card border border-border rounded-lg p-6 mb-8">
-          <h3 className="text-2xl font-bold mb-6 text-white">Search Donors</h3>
+      <div className="max-w-7xl mx-auto">
+        {/* Search Form */}
+        <form onSubmit={handleSearch} className="bg-gradient-to-br from-card/80 via-card/60 to-card/80 backdrop-blur-sm border-2 border-gray-800 rounded-2xl p-6 md:p-8 mb-8 shadow-2xl">
+          <div className="flex items-center gap-3 mb-6">
+            <div className="w-10 h-10 bg-blue-600/20 rounded-xl flex items-center justify-center text-2xl">
+              🎯
+            </div>
+            <h3 className="text-2xl font-bold text-white">Search Donors</h3>
+          </div>
           
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             <div>
-              <label className="block text-sm font-medium mb-2 text-gray-300">State</label>
+              <label className="block text-sm font-semibold mb-3 text-gray-300 flex items-center gap-2">
+                <span>🏙️</span>
+                <span>State</span>
+              </label>
               <select
                 name="state"
                 value={filters.state}
                 onChange={handleFilterChange}
-                className="w-full bg-gray-900 border border-gray-700 rounded-lg px-4 py-3 text-white focus:border-red-600 focus:outline-none transition-colors"
+                className="w-full bg-gray-900 border-2 border-gray-700 rounded-xl px-4 py-3 text-white focus:border-blue-600 focus:outline-none transition-all duration-300 hover:border-gray-600"
               >
                 {INDIAN_STATES.map((state) => (
                   <option key={state} value={state}>
@@ -113,12 +132,15 @@ export default function AllDonors() {
             </div>
 
             <div>
-              <label className="block text-sm font-medium mb-2 text-gray-300">Blood Group</label>
+              <label className="block text-sm font-semibold mb-3 text-gray-300 flex items-center gap-2">
+                <span>🩸</span>
+                <span>Blood Group</span>
+              </label>
               <select
                 name="bloodGroup"
                 value={filters.bloodGroup}
                 onChange={handleFilterChange}
-                className="w-full bg-gray-900 border border-gray-700 rounded-lg px-4 py-3 text-white focus:border-red-600 focus:outline-none transition-colors"
+                className="w-full bg-gray-900 border-2 border-gray-700 rounded-xl px-4 py-3 text-white focus:border-red-600 focus:outline-none transition-all duration-300 hover:border-gray-600"
               >
                 {BLOOD_GROUPS.map((group) => (
                   <option key={group} value={group}>
@@ -132,21 +154,55 @@ export default function AllDonors() {
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full bg-red-600 hover:bg-red-700 text-white py-3 rounded-lg font-semibold transition-all duration-200 disabled:opacity-50"
+                className="group w-full bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white py-3 rounded-xl font-bold transition-all duration-300 disabled:opacity-50 shadow-lg hover:shadow-blue-600/50 hover:scale-105 flex items-center justify-center gap-2"
               >
-                {loading ? "Searching..." : "Search Donors"}
+                {loading ? (
+                  <>
+                    <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                    <span>Searching...</span>
+                  </>
+                ) : (
+                  <>
+                    <span>🔍</span>
+                    <span>Search Donors</span>
+                    <svg className="w-5 h-5 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                    </svg>
+                  </>
+                )}
               </button>
+            </div>
+          </div>
+
+          {/* Current Selection Display */}
+          <div className="mt-6 pt-6 border-t border-gray-800">
+            <div className="flex flex-wrap items-center gap-3">
+              <span className="text-sm text-gray-400">Currently searching:</span>
+              <div className="flex gap-2">
+                <span className="px-3 py-1 bg-blue-900/30 border border-blue-700/50 rounded-lg text-blue-400 text-sm font-semibold">
+                  {filters.state}
+                </span>
+                <span className="px-3 py-1 bg-red-900/30 border border-red-700/50 rounded-lg text-red-400 text-sm font-semibold">
+                  {filters.bloodGroup}
+                </span>
+              </div>
             </div>
           </div>
         </form>
 
         {/* Active Donors List */}
-        <div className="mb-8">
-          <h3 className="text-2xl font-bold mb-6 text-white">Active Donors</h3>
+        <div className="mb-6">
+          <div className="flex items-center gap-3 mb-6">
+            <div className="w-10 h-10 bg-green-600/20 rounded-xl flex items-center justify-center text-2xl">
+              ✅
+            </div>
+            <h3 className="text-2xl md:text-3xl font-bold text-white">Active Donors</h3>
+          </div>
           
           {activeLoading ? (
-            <div className="text-center py-8">
-              <p className="text-white">Loading active donors...</p>
+            <div className="flex flex-col items-center justify-center py-16">
+              <div className="w-16 h-16 border-4 border-blue-600 border-t-transparent rounded-full animate-spin mb-4"></div>
+              <p className="text-white text-lg">Loading active donors...</p>
             </div>
           ) : activeDonors.length > 0 ? (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -236,15 +292,17 @@ export default function AllDonors() {
               ))}
             </div>
           ) : (
-            <div className="bg-card border border-border rounded-lg p-8 text-center">
-              <p className="text-white">No active donors available at the moment.</p>
+            <div className="bg-card/50 border-2 border-gray-800 rounded-2xl p-12 text-center">
+              <div className="text-6xl mb-4">🩸</div>
+              <p className="text-white text-lg font-semibold mb-2">No active donors available</p>
+              <p className="text-gray-400">Check back later or try searching in a different area.</p>
             </div>
           )}
         </div>
 
         {/* Search Results */}
         {searched && (
-          <div>
+          <div className="mt-6">
             <h4 className="text-xl font-bold mb-4 text-white">
               {loading ? "Searching..." : `Found ${donors.length} donor${donors.length !== 1 ? "s" : ""}`}
             </h4>
@@ -339,9 +397,18 @@ export default function AllDonors() {
                 ))}
               </div>
             ) : (
-              <div className="bg-card border border-border rounded-lg p-8 text-center">
-                <p className="text-white mb-4">No donors found matching your criteria.</p>
-                <p className="text-sm text-gray-400">Try searching in a different city or blood group.</p>
+              <div className="bg-card/50 border-2 border-gray-800 rounded-2xl p-12 text-center">
+                <div className="text-6xl mb-4">🔍</div>
+                <p className="text-white text-lg font-semibold mb-2">No donors found</p>
+                <p className="text-gray-400 mb-4">Try searching in a different state or blood group.</p>
+                <div className="flex flex-wrap gap-2 justify-center">
+                  <span className="px-3 py-1 bg-blue-900/30 border border-blue-700/50 rounded-lg text-blue-400 text-sm">
+                    {filters.state}
+                  </span>
+                  <span className="px-3 py-1 bg-red-900/30 border border-red-700/50 rounded-lg text-red-400 text-sm">
+                    {filters.bloodGroup}
+                  </span>
+                </div>
               </div>
             )}
           </div>

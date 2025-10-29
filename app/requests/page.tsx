@@ -177,7 +177,7 @@ export default function RequestsPage() {
   const filteredRequests = filter === "all" ? requests : requests.filter((r) => r.status === filter)
 
   return (
-    <div className="max-w-6xl mx-auto px-4 pt-6 pb-12">
+    <div className="min-h-screen bg-gradient-to-b from-background via-card/20 to-background">
       <style>{`
         @keyframes fadeIn {
           from {
@@ -192,32 +192,71 @@ export default function RequestsPage() {
         .fade-in {
           animation: fadeIn 0.5s ease-out;
         }
+        @keyframes shimmer {
+          0% { background-position: -1000px 0; }
+          100% { background-position: 1000px 0; }
+        }
+        .shimmer {
+          animation: shimmer 2s infinite;
+          background: linear-gradient(to right, transparent 0%, rgba(255,255,255,0.1) 50%, transparent 100%);
+          background-size: 1000px 100%;
+        }
       `}</style>
 
-      <h1 className="text-4xl font-bold mb-2 text-white">All Blood Requests</h1>
-      <p className="text-white mb-8">Browse and respond to blood donation requests from across India</p>
-
-      <div className="flex gap-4 mb-8">
-        {(["all", "open", "fulfilled"] as const).map((status) => (
-          <button
-            key={status}
-            onClick={() => {
-              setFilter(status)
-              setRequests([])
-              setLastDoc(null)
-              setHasMore(true)
-              fetchInitialRequests()
-            }}
-            className={`px-6 py-2 rounded-lg font-semibold transition ${
-              filter === status
-                ? "bg-primary text-white"
-                : "bg-card border border-border hover:border-primary text-foreground"
-            }`}
-          >
-            {status.charAt(0).toUpperCase() + status.slice(1)}
-          </button>
-        ))}
+      {/* Hero Header */}
+      <div className="bg-gradient-to-r from-red-950/40 via-red-900/30 to-red-950/40 border-b border-red-900/30">
+        <div className="max-w-7xl mx-auto px-4 py-8">
+          <div className="text-center">
+            <div className="inline-block mb-4 px-4 py-2 bg-red-600/10 border border-red-600/20 rounded-full text-red-500 text-sm font-medium">
+              🆘 Live Requests
+            </div>
+            <h1 className="text-4xl md:text-6xl font-bold mb-4 bg-gradient-to-r from-white via-red-300 to-white bg-clip-text text-transparent">
+              Blood Requests
+            </h1>
+            <p className="text-white text-lg md:text-xl max-w-2xl mx-auto">
+              Browse and respond to urgent blood donation requests from across India. Every response can save a life.
+            </p>
+          </div>
+        </div>
       </div>
+
+      <div className="max-w-7xl mx-auto px-4 py-6">
+        {/* Filter Tabs */}
+        <div className="mb-6">
+          <div className="bg-card/50 backdrop-blur-sm border border-gray-800 rounded-2xl p-2 inline-flex gap-2">
+            {([
+              { value: "all", label: "All Requests", icon: "📋", count: requests.length },
+              { value: "open", label: "Active", icon: "🔴", count: requests.filter(r => r.status === 'open').length },
+              { value: "fulfilled", label: "Fulfilled", icon: "✅", count: requests.filter(r => r.status === 'fulfilled').length }
+            ] as const).map((tab) => (
+              <button
+                key={tab.value}
+                onClick={() => {
+                  setFilter(tab.value)
+                  setRequests([])
+                  setLastDoc(null)
+                  setHasMore(true)
+                  fetchInitialRequests()
+                }}
+                className={`group relative px-6 py-3 rounded-xl font-semibold transition-all duration-300 ${
+                  filter === tab.value
+                    ? "bg-gradient-to-r from-red-600 to-red-700 text-white shadow-lg shadow-red-600/30"
+                    : "text-gray-400 hover:text-white hover:bg-gray-800/50"
+                }`}
+              >
+                <div className="flex items-center gap-2">
+                  <span>{tab.icon}</span>
+                  <span className="hidden sm:inline">{tab.label}</span>
+                  <span className={`px-2 py-0.5 rounded-full text-xs font-bold ${
+                    filter === tab.value ? "bg-white/20" : "bg-gray-700"
+                  }`}>
+                    {tab.count}
+                  </span>
+                </div>
+              </button>
+            ))}
+          </div>
+        </div>
 
       {loading ? (
         <div className="text-center py-12">
@@ -425,11 +464,13 @@ export default function RequestsPage() {
           )}
         </>
       ) : (
-        <div className="bg-card border border-border rounded-lg p-8 text-center">
-          <p className="text-muted-foreground mb-4">No blood requests found.</p>
-          <p className="text-sm text-muted-foreground">Check back later or post a new request.</p>
+        <div className="bg-card/50 border border-gray-800 rounded-2xl p-8 text-center">
+          <div className="text-6xl mb-4">🩸</div>
+          <p className="text-white mb-4 text-lg font-semibold">No blood requests found.</p>
+          <p className="text-sm text-gray-400">Check back later or post a new request.</p>
         </div>
       )}
+      </div>
     </div>
   )
 }
