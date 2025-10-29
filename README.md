@@ -71,54 +71,58 @@ Meet the creator — a young developer building for a cause.
 
 ## 🧩 Project Structure
 
+```bash
 BloodNearMe/
 │
 ├── app/
-│ ├── about/
-│ ├── admin/
-│ ├── donor/
-│ ├── find/
-│ ├── map/
-│ ├── request/
-│ └── ...
+│   ├── about/
+│   ├── admin/
+│   ├── donor/
+│   ├── find/
+│   ├── map/
+│   ├── request/
+│   └── ...
 │
 ├── lib/
-│ ├── firebase.ts
-│ └── types.ts
+│   ├── firebase.ts
+│   └── types.ts
 │
 ├── public/
-│ ├── home.png
-│ ├── donors.png
-│ ├── about.png
-│ └── aboutdev.png
+│   ├── home.png
+│   ├── donors.png
+│   ├── about.png
+│   └── aboutdev.png
 │
 └── package.json
-
----
-
+```
 ## 🚀 Deployment
 
 Deployed seamlessly on **Vercel** for blazing-fast speed and scalability.  
 Visit the live site → **[blood-near-me.vercel.app](https://blood-near-me.vercel.app/)**  
 
 To deploy your own:
-```bash
+```
 git clone https://github.com/yourusername/BloodNearMe.git
 cd BloodNearMe
 npm install
 npm run build
 npm start
-
+```
 ❤️ Credits
 
 Developed by Abhay Kumar
+
 21-year-old Full Stack Developer from Kolkata, India 🇮🇳
 Building technology that saves lives through community collaboration.
 
-🔗 Connect with me
-🌐 Website
- | 💻 GitHub
- | 💼 LinkedIn
- | ✉️ Email
+🌐 Connect with Me
+
+🌍 Website
+
+💻 GitHub
+
+💼 LinkedIn
+
+✉️ Email
 
 <p align="center"> <b>“Every drop counts. Every second matters.”</b> <br>Made with ❤️ in India. </p> ```
