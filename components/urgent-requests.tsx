@@ -112,7 +112,7 @@ export default function UrgentRequests() {
   }
 
   return (
-    <section className="py-12 px-4 bg-background">
+    <section className="py-8 px-4 bg-background">
       <div className="max-w-6xl mx-auto">
         <div className="mb-12">
           <div className="flex items-center gap-3 mb-4">

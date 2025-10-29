@@ -9,7 +9,7 @@ function JoinNetworkSection() {
   const [activeTab, setActiveTab] = useState<"donor" | "receiver">("donor");
 
   return (
-    <section className="py-12 px-4 bg-gradient-to-br from-card/50 via-background to-red-950/10 relative overflow-hidden">
+    <section className="py-8 px-4 bg-gradient-to-br from-card/50 via-background to-red-950/10 relative overflow-hidden">
       <div className="absolute inset-0 bg-grid-pattern opacity-5"></div>
       <div className="max-w-5xl mx-auto relative z-10">
         <div className="text-center mb-12">
@@ -203,7 +203,7 @@ export default function Home() {
   return (
     <div className="min-h-screen">
       {/* Hero Section */}
-      <section className="relative bg-gradient-to-br from-red-950/20 via-card to-background pt-12 pb-12 px-4 overflow-hidden">
+      <section className="relative bg-gradient-to-br from-red-950/20 via-card to-background pt-12 pb-8 px-4 overflow-hidden">
         {/* Animated background elements */}
         <div className="absolute inset-0 overflow-hidden pointer-events-none">
           <div className="absolute top-20 left-10 w-72 h-72 bg-red-600/10 rounded-full blur-3xl animate-pulse"></div>
@@ -271,7 +271,7 @@ export default function Home() {
       <JoinNetworkSection />
 
       {/* Features Section */}
-      <section className="py-12 px-4 bg-gradient-to-b from-background to-card/30">
+      <section className="py-8 px-4 bg-gradient-to-b from-background to-card/30">
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-16">
             <h2 className="text-4xl md:text-5xl font-bold mb-4 text-white">How It Works</h2>
@@ -325,7 +325,7 @@ export default function Home() {
       </section>
 
       {/* Stats Section */}
-      <section className="py-12 px-4 bg-gradient-to-br from-red-950/30 via-card to-background relative overflow-hidden">
+      <section className="py-8 px-4 bg-gradient-to-br from-red-950/30 via-card to-background relative overflow-hidden">
         <div className="absolute inset-0 bg-grid-pattern opacity-5"></div>
         <div className="max-w-6xl mx-auto relative z-10">
           <div className="text-center mb-16">
@@ -354,7 +354,7 @@ export default function Home() {
       <AboutSection />
 
       {/* CTA Section */}
-      <section className="relative bg-gradient-to-r from-red-600 via-red-700 to-red-800 text-white py-12 px-4 overflow-hidden">
+      <section className="relative bg-gradient-to-r from-red-600 via-red-700 to-red-800 text-white py-8 px-4 overflow-hidden">
         <div className="absolute inset-0 bg-black/20"></div>
         <div className="absolute top-0 left-0 w-full h-full">
           <div className="absolute top-10 left-10 w-64 h-64 bg-white/5 rounded-full blur-3xl"></div>

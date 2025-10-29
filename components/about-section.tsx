@@ -10,7 +10,7 @@ export default function AboutSection() {
   }, [])
 
   return (
-    <section className="py-12 px-4 bg-gradient-to-br from-card via-background to-card/50 relative overflow-hidden">
+    <section className="py-8 px-4 bg-gradient-to-br from-card via-background to-card/50 relative overflow-hidden">
       {/* Animated background elements */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <div className="absolute top-10 right-10 w-72 h-72 bg-red-600/5 rounded-full blur-3xl animate-pulse"></div>
@@ -81,7 +81,7 @@ export default function AboutSection() {
 
       <div className="max-w-7xl mx-auto relative z-10">
         {/* Header */}
-        <div className="text-center mb-16 fade-in-up">
+        <div className="text-center mb-12 fade-in-up">
           <div className="inline-block mb-4 px-4 py-2 bg-red-600/10 border border-red-600/20 rounded-full text-red-500 text-sm font-medium">
             💡 Our Story
           </div>
