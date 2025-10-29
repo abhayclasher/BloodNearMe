@@ -1,6 +1,6 @@
 export default function AboutSection() {
   return (
-    <section className="py-16 px-4 bg-card">
+    <section className="py-12 px-4 bg-card">
       <div className="max-w-6xl mx-auto">
         <h2 className="text-4xl font-bold text-center mb-8 text-white">About BloodNearMe</h2>
 

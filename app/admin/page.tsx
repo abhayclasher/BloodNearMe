@@ -368,7 +368,7 @@ export default function AdminDashboardPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-background via-card/20 to-background p-4 md:p-8">
+    <div className="min-h-screen bg-gradient-to-br from-background via-card/20 to-background pt-4 pb-4 px-4 md:pt-6 md:pb-8 md:px-8">
       {/* Header */}
       <div className="mb-8 flex justify-between items-center">
         <div>

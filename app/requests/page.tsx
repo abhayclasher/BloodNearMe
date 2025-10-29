@@ -177,7 +177,7 @@ export default function RequestsPage() {
   const filteredRequests = filter === "all" ? requests : requests.filter((r) => r.status === filter)
 
   return (
-    <div className="max-w-6xl mx-auto px-4 py-12">
+    <div className="max-w-6xl mx-auto px-4 pt-6 pb-12">
       <style>{`
         @keyframes fadeIn {
           from {

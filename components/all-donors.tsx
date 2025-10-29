@@ -83,7 +83,7 @@ export default function AllDonors() {
   }
 
   return (
-    <section className="py-16 px-4 bg-background">
+    <section className="pt-0 pb-16 px-4 bg-background">
       <div className="max-w-6xl mx-auto">
         <div className="text-center mb-12">
           <h2 className="text-4xl md:text-5xl font-bold text-white mb-4">Find Blood Donors</h2>

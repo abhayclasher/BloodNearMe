@@ -5,7 +5,7 @@ import Link from "next/link"
 export default function DashboardPage() {
 
   return (
-    <div className="max-w-6xl mx-auto px-4 py-12">
+    <div className="max-w-6xl mx-auto px-4 pt-6 pb-12">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
         <div className="bg-card border border-border rounded-lg p-6">
           <h3 className="font-semibold mb-4">Find Blood Donors</h3>

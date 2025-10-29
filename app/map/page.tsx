@@ -28,7 +28,7 @@ export default function MapPage() {
 
 
   return (
-    <div className="max-w-6xl mx-auto px-4 py-12">
+    <div className="max-w-6xl mx-auto px-4 pt-6 pb-12">
       <h1 className="text-4xl font-bold mb-8">Donor Map</h1>
 
       <div className="bg-card border border-border rounded-lg p-6 mb-8">

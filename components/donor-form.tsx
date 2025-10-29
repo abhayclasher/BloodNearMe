@@ -91,7 +91,7 @@ export default function DonorForm() {
   }
 
   return (
-    <section className="py-16 px-4 bg-background">
+    <section className="pt-0 pb-16 px-4 bg-background">
       <style>{`
         @keyframes slideInForm {
           from {

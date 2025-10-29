@@ -22,11 +22,11 @@ export default function Navbar() {
             <Link href="/find" className="hover:text-primary transition font-medium">
               Find Donor
             </Link>
-            <Link href="/donor" className="hover:text-primary transition font-medium">
-              Become a Donor
-            </Link>
             <Link href="/request" className="hover:text-primary transition font-medium">
               Request Blood
+            </Link>
+            <Link href="/donor" className="hover:text-primary transition font-medium">
+              Become a Donor
             </Link>
             <Link href="/about" className="hover:text-primary transition font-medium">
               About
@@ -48,11 +48,11 @@ export default function Navbar() {
             <Link href="/find" className="block py-2 hover:text-primary font-medium">
               Find Donor
             </Link>
-            <Link href="/donor" className="block py-2 hover:text-primary font-medium">
-              Become a Donor
-            </Link>
             <Link href="/request" className="block py-2 hover:text-primary font-medium">
               Request Blood
+            </Link>
+            <Link href="/donor" className="block py-2 hover:text-primary font-medium">
+              Become a Donor
             </Link>
             <Link href="/about" className="block py-2 hover:text-primary font-medium">
               About
