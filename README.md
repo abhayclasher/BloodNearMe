@@ -109,23 +109,26 @@ npm run build
 npm start
 ```
 
-❤️ Credits
+## ❤️ Credits  
 
-Developed by Abhay Kumar
+<div align="center">
 
-21-year-old Full Stack Developer from Kolkata, India 🇮🇳
-Building technology that saves lives through community collaboration.
+### 👨‍💻 Developed by  
+# **Abhay Kumar**  
 
-## 🌐 Connect with Me  
+🧠 21-year-old Full Stack Web Developer from **Kolkata, India 🇮🇳**  
+Building technology that **saves lives through community collaboration.**
+
+---
 
 <p align="center">
-  <a href="https://blood-near-me.vercel.app" target="_blank">
+  <a href="https://abhaypro.com" target="_blank">
     <img src="https://img.shields.io/badge/🌍 Website-FF4747?style=for-the-badge&logo=google-chrome&logoColor=white" alt="Website" />
   </a>
-  <a href="https://github.com/abhayprocloud" target="_blank">
+  <a href="https://github.com/abhayclasher" target="_blank">
     <img src="https://img.shields.io/badge/GitHub-1C1C1C?style=for-the-badge&logo=github&logoColor=white" alt="GitHub" />
   </a>
-  <a href="https://linkedin.com/in/abhayprocloud" target="_blank">
+  <a href="https://linkedin.com/in/abhayclasher" target="_blank">
     <img src="https://img.shields.io/badge/LinkedIn-0A66C2?style=for-the-badge&logo=linkedin&logoColor=white" alt="LinkedIn" />
   </a>
   <a href="mailto:abhaypro.cloud@gmail.com" target="_blank">
@@ -133,5 +136,12 @@ Building technology that saves lives through community collaboration.
   </a>
 </p>
 
+---
 
-<p align="center"> <b>“Every drop counts. Every second matters.”</b> <br>Made with ❤️ in India. </p> ```
+<p align="center">
+  <b>“Every drop counts. Every second matters.”</b>  
+  <br>❤️ Made with love in India 🇮🇳
+</p>
+
+</div>
+
