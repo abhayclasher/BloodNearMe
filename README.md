@@ -36,7 +36,7 @@ Post requests or find donors with verified, real-time listings filtered by **sta
 |-----------|-------------|
 | **Frontend** | Next.js 16 (App Router), React, TypeScript |
 | **Database** | Firebase Firestore |
-| **Styling** | TailwindCSS + Shadcn UI |
+| **Styling** | TailwindCSS |
 | **Hosting** | Vercel |
 | **Theme** | Default Dark Mode + Light Mode Toggle |
 | **Icons** | Lucide React |
