@@ -1,5 +1,5 @@
 <h1 align="center">🩸 BloodNearMe</h1>
-![License: MIT](https://img.shields.io/badge/License-MIT-red.svg)
+<img src="https://img.shields.io/badge/License-BloodNearMe%20Community%20License-red.svg" alt="License">
 
 <p align="center">
   <b>Connecting Lives, One Drop at a Time</b>  
@@ -109,6 +109,15 @@ npm install
 npm run build
 npm start
 ```
+
+---
+
+## 📄 License
+
+This project is licensed under the **BloodNearMe Community License**.  
+You may use, modify, and share the project for **personal and non-commercial** purposes only.  
+See the [LICENSE](./LICENSE) file for details.
+
 
 ## ❤️ Credits  
 
