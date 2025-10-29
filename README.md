@@ -109,4 +109,16 @@ npm install
 npm run build
 npm start
 
+❤️ Credits
 
+Developed by Abhay Kumar
+21-year-old Full Stack Developer from Kolkata, India 🇮🇳
+Building technology that saves lives through community collaboration.
+
+🔗 Connect with me
+🌐 Website
+ | 💻 GitHub
+ | 💼 LinkedIn
+ | ✉️ Email
+
+<p align="center"> <b>“Every drop counts. Every second matters.”</b> <br>Made with ❤️ in India. </p> ```
