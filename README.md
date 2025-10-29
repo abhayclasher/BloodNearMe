@@ -108,6 +108,7 @@ npm install
 npm run build
 npm start
 ```
+
 ❤️ Credits
 
 Developed by Abhay Kumar
@@ -115,14 +116,22 @@ Developed by Abhay Kumar
 21-year-old Full Stack Developer from Kolkata, India 🇮🇳
 Building technology that saves lives through community collaboration.
 
-🌐 Connect with Me
+## 🌐 Connect with Me  
 
-🌍 Website
+<p align="center">
+  <a href="https://blood-near-me.vercel.app" target="_blank">
+    <img src="https://img.shields.io/badge/🌍 Website-FF4747?style=for-the-badge&logo=google-chrome&logoColor=white" alt="Website" />
+  </a>
+  <a href="https://github.com/abhayprocloud" target="_blank">
+    <img src="https://img.shields.io/badge/GitHub-1C1C1C?style=for-the-badge&logo=github&logoColor=white" alt="GitHub" />
+  </a>
+  <a href="https://linkedin.com/in/abhayprocloud" target="_blank">
+    <img src="https://img.shields.io/badge/LinkedIn-0A66C2?style=for-the-badge&logo=linkedin&logoColor=white" alt="LinkedIn" />
+  </a>
+  <a href="mailto:abhaypro.cloud@gmail.com" target="_blank">
+    <img src="https://img.shields.io/badge/Email-D14836?style=for-the-badge&logo=gmail&logoColor=white" alt="Email" />
+  </a>
+</p>
 
-💻 GitHub
-
-💼 LinkedIn
-
-✉️ Email
 
 <p align="center"> <b>“Every drop counts. Every second matters.”</b> <br>Made with ❤️ in India. </p> ```
