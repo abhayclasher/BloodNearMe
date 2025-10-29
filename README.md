@@ -1,13 +1,14 @@
 <h1 align="center">🩸 BloodNearMe</h1>
-<img src="https://img.shields.io/badge/License-BloodNearMe%20Community%20License-red.svg" alt="License">
 
 <p align="center">
-  <b>Connecting Lives, One Drop at a Time</b>  
-  <br>
-  A modern, India-based real-time blood donor and receiver platform built with <b>Next.js 16</b> + <b>Firebase Firestore</b>.  
-  <br>
-  <a href="https://blood-near-me.vercel.app/" target="_blank"><b>🌐 Live Website</b></a>
+  <a href="https://blood-near-me.vercel.app" target="_blank">
+    <img src="https://img.shields.io/badge/🌍_Live_Site-blood--near--me.vercel.app-FF4747?style=for-the-badge&logo=vercel&logoColor=white" alt="Live Site" />
+  </a>
+  <img src="https://img.shields.io/badge/License-BloodNearMe%20Community-red?style=for-the-badge&logo=heart&logoColor=white" alt="License" />
+  <img src="https://img.shields.io/badge/Built_with-Next.js-black?style=for-the-badge&logo=nextdotjs&logoColor=white" alt="Next.js" />
+  <img src="https://img.shields.io/badge/Database-Firebase-orange?style=for-the-badge&logo=firebase&logoColor=white" alt="Firebase" />
 </p>
+
 
 ---
 
