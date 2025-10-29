@@ -203,7 +203,7 @@ export default function Home() {
   return (
     <div className="min-h-screen">
       {/* Hero Section */}
-      <section className="relative bg-gradient-to-br from-red-950/20 via-card to-background pt-12 pb-8 px-4 overflow-hidden">
+      <section className="relative bg-gradient-to-br from-red-950/20 via-card to-background pt-6 md:pt-12 pb-8 px-4 overflow-hidden">
         {/* Animated background elements */}
         <div className="absolute inset-0 overflow-hidden pointer-events-none">
           <div className="absolute top-20 left-10 w-72 h-72 bg-red-600/10 rounded-full blur-3xl animate-pulse"></div>
