@@ -12,7 +12,7 @@ export default function Navbar() {
         <div className="flex justify-between items-center h-16">
           <Link href="/" className="flex items-center gap-2 hover:opacity-80 transition">
             <span className="text-2xl">🩸</span>
-            <span className="font-bold text-lg hidden sm:inline">BloodNearMe</span>
+            <span className="font-bold text-lg">BloodNearMe</span>
           </Link>
 
           <div className="hidden md:flex items-center gap-8 text-white">
