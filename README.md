@@ -94,9 +94,6 @@ BloodNearMe/
 │
 └── package.json
 
-yaml
-Copy code
-
 ---
 
 ## 🚀 Deployment
@@ -111,14 +108,5 @@ cd BloodNearMe
 npm install
 npm run build
 npm start
-❤️ Credits
-Developed by Abhay Kumar
-21-year-old Full Stack Developer from Kolkata, India 🇮🇳
-Building technology that saves lives through community collaboration.
 
-🔗 Connect with me
-🌐 Website | 💻 GitHub | 💼 LinkedIn | ✉️ Email
 
-<p align="center"> <b>“Every drop counts. Every second matters.”</b> <br>Made with ❤️ in India. </p> ```
-Would you like me to add GitHub badges (like “Made with Next.js”, “Deployed on Vercel”, “Open Source”) at the top for extra polish?
-They’ll give your README a professional developer look.
